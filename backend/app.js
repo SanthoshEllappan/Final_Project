@@ -7,7 +7,7 @@ const connectDb = require('./config/db')
 const app = express()
 const certificationRoutes = require('./routes/certificationRoutes')
 //Load config
-
+const projectAchievementsRoutes = require('./routes/projectAchievements')
 dotenv.config();
 
 
@@ -26,7 +26,7 @@ app.use('/admin', require('./routes/adminRouter'))
 
 //PORT NUMBER
 const PORT = process.env.PORT || 8080
-
+app.use('/api/project-achievements', projectAchievementsRoutes);
 app.use('/api/certifications', certificationRoutes);
 //server port
 app.listen(PORT, () => { console.log(`runing on port ${PORT}`) })
