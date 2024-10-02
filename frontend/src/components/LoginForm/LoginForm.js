@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { AuthUser } from '../AuthRouter';
 import { useNavigate } from 'react-router-dom';
+ // Correct import for routing
+
 import {
     Button,
     CssBaseline,
@@ -201,9 +203,9 @@ export default function SignIn() {
                                         {formError.error}
                                     </Typography>
                                 )}
-                                <p className="small fw-bold mt-2 pt-1 mb-0 text-center">
-                                    Don't have an account? <Link href="#!" className="link-danger">Register</Link>
-                                </p>
+                             <p className="small fw-bold mt-2 pt-1 mb-0 text-center">
+    Don't have an account? <Link to="/signup" className="link-danger">Register</Link>
+</p>
                             </form>
                         </Grid>
                     </Grid>
