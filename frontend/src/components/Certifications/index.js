@@ -1,118 +1,153 @@
-// src/components/Certifications.js
 import React, { useState } from 'react';
+import './CertificationsForm.css'; // Ensure to import the CSS file
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+const CertificationsForm = () => {
+  const navigate = useNavigate()
+  const [certifications, setCertifications] = useState({
+    certificationTitle: '',
+    platform: '',
+    specialization: '',
+    dateObtained: '',
+    duration: '',
+    additionalCertifications: '',
+  });
 
-const Certifications = () => {
-    const [files, setFiles] = useState([]);
-    const [names, setNames] = useState(['']); // Array for certificate names
-    const [domains, setDomains] = useState(['']); // Array for domains
-    const [issueDates, setIssueDates] = useState(['']); // Array for issue dates
-    const [platforms, setPlatforms] = useState(['']); // Array for platforms
-    const [message, setMessage] = useState('');
+  // Dropdown options for specializations
+  const specializations = [
+    'Data Science',
+    'Web Development',
+    'Mobile App Development',
+    'Cloud Computing',
+    'Machine Learning',
+    'Cybersecurity',
+    'Project Management',
+    'AI & Deep Learning',
+    'Other',
+  ];
 
-    const handleFileChange = (event) => {
-        setFiles(Array.from(event.target.files));
-    };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setCertifications((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
-    const handleNameChange = (index, event) => {
-        const updatedNames = [...names];
-        updatedNames[index] = event.target.value;
-        setNames(updatedNames);
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log('Submitted Certifications:', certifications);
+    const res  = await axios.post('http://127.0.0.1:8080/api/certifications/certifications',{data:certifications,token:localStorage.getItem("userConfig")});
+    if (res.status == 201) {
+      
+      navigate('/dashboard', { replace: true });
+  } else {
+      console.log("Error");}
+  };
 
-    const handleDomainChange = (index, event) => {
-        const updatedDomains = [...domains];
-        updatedDomains[index] = event.target.value;
-        setDomains(updatedDomains);
-    };
-
-    const handleIssueDateChange = (index, event) => {
-        const updatedIssueDates = [...issueDates];
-        updatedIssueDates[index] = event.target.value;
-        setIssueDates(updatedIssueDates);
-    };
-
-    const handlePlatformChange = (index, event) => {
-        const updatedPlatforms = [...platforms];
-        updatedPlatforms[index] = event.target.value;
-        setPlatforms(updatedPlatforms);
-    };
-
-    const handleUpload = async () => {
-        if (files.length === 0 || names.length === 0) {
-            setMessage('Please provide certificate details and select files to upload.');
-            return;
-        }
-
-        const formData = new FormData();
-        files.forEach(file => {
-            formData.append('certificates[]', file);
-        });
-
-        formData.append('names', JSON.stringify(names)); // Convert arrays to JSON strings
-        formData.append('domains', JSON.stringify(domains));
-        formData.append('issueDates', JSON.stringify(issueDates));
-        formData.append('platforms', JSON.stringify(platforms));
-
-        try {
-            console.log(formData,"asgsa")
-            const response = await axios.post('/api/certifications/upload',{data:"sdad"}
-            //      {
-            //     headers: {
-            //         'Content-Type': 'multipart/form-data',
-            //     },
-            // }
-        );
-            setMessage(response.data.message);
-        } catch (error) {
-            console.error(error);
-            setMessage('Error uploading certificates. Please try again.');
-        }
-    };
-
-    const addInputFields = () => {
-        setNames([...names, '']);
-        setDomains([...domains, '']);
-        setIssueDates([...issueDates, '']);
-        setPlatforms([...platforms, '']);
-    };
-
-    return (
-        <div>
-            <h1>Upload Your Certificates</h1>
-            {names.map((_, index) => (
-                <div key={index}>
-                    <input
-                        type="text"
-                        placeholder="Certificate Name"
-                        value={names[index]}
-                        onChange={(event) => handleNameChange(index, event)}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Domain"
-                        value={domains[index]}
-                        onChange={(event) => handleDomainChange(index, event)}
-                    />
-                    <input
-                        type="date"
-                        value={issueDates[index]}
-                        onChange={(event) => handleIssueDateChange(index, event)}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Learning Platform"
-                        value={platforms[index]}
-                        onChange={(event) => handlePlatformChange(index, event)}
-                    />
-                    <input type="file" onChange={handleFileChange} />
-                </div>
-            ))}
-            <button onClick={addInputFields}>Add More Certification</button>
-            <button onClick={handleUpload}>Upload Certificates</button>
-            {message && <p>{message}</p>}
+  return (
+    <div className="certifications-form-container">
+      <h2 className="form-title">Certifications Assessment</h2>
+      <form onSubmit={handleSubmit} className="certifications-form">
+        <div className="form-group">
+          <label htmlFor="certificationTitle" className="form-label">
+            Certification Title
+          </label>
+          <input
+            type="text"
+            id="certificationTitle"
+            name="certificationTitle"
+            value={certifications.certificationTitle}
+            onChange={handleChange}
+            required
+            className="form-input"
+          />
         </div>
-    );
+
+        <div className="form-group">
+          <label htmlFor="platform" className="form-label">
+            Platform
+          </label>
+          <input
+            type="text"
+            id="platform"
+            name="platform"
+            value={certifications.platform}
+            onChange={handleChange}
+            required
+            className="form-input"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="specialization" className="form-label">
+            Specialization
+          </label>
+          <select
+            id="specialization"
+            name="specialization"
+            value={certifications.specialization}
+            onChange={handleChange}
+            required
+            className="form-input"
+          >
+            <option value="" disabled>Select Specialization</option>
+            {specializations.map((spec, index) => (
+              <option key={index} value={spec}>
+                {spec}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="dateObtained" className="form-label">
+            Date Obtained
+          </label>
+          <input
+            type="date"
+            id="dateObtained"
+            name="dateObtained"
+            value={certifications.dateObtained}
+            onChange={handleChange}
+            required
+            className="form-input"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="duration" className="form-label">
+            Duration (in hours)
+          </label>
+          <input
+            type="number"
+            id="duration"
+            name="duration"
+            value={certifications.duration}
+            onChange={handleChange}
+            required
+            className="form-input"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="additionalCertifications" className="form-label">
+            Additional Certifications (comma-separated)
+          </label>
+          <input
+            type="text"
+            id="additionalCertifications"
+            name="additionalCertifications"
+            value={certifications.additionalCertifications}
+            onChange={handleChange}
+            className="form-input"
+          />
+        </div>
+
+        <button type="submit" className="submit-button">Submit</button>
+      </form>
+    </div>
+  );
 };
 
-export default Certifications;
+export default CertificationsForm;

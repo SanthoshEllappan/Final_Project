@@ -66,6 +66,12 @@ const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body
 
     const user = await User.findOne({ email })
+    const token = generateToken(user._id)
+    
+    // res.cookie('token', token, {
+    //     httpOnly: true,
+    //     maxAge: 24 * 60 * 60 * 1000
+    // });
 
     if (user && (await bcrypt.compare(password, user.password))) {
         res.json({
@@ -76,7 +82,7 @@ const loginUser = asyncHandler(async (req, res) => {
                 name: user.name,
                 email: user.email,
                 status: user.status,
-                token: generateToken(user._id)
+                token
             }]
         })
     } else {

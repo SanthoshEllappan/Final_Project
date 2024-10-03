@@ -1,22 +1,19 @@
-// 
 import React, { useState } from 'react';
+import './TechnicalSkillsForm.css'; // Ensure to import the CSS file
 import axios from 'axios';
-import './SoftSkillsForm.css'; // Ensure to import the CSS file
 import { useNavigate } from 'react-router-dom';
 
-const SoftSkillsForm = () => {
+const TechnicalSkillsForm = () => {
   const navigate = useNavigate()
-  const [softSkills, setSoftSkills] = useState({
-    communication: '',
-    teamwork: '',
-    problemSolving: '',
-    adaptability: '',
-    timeManagement: '',
-    criticalThinking: '',
-    creativity: '',
-    leadership: '',
-    interpersonalSkills: '',
-    emotionalIntelligence: '',
+  const [technicalSkills, setTechnicalSkills] = useState({
+    programmingLanguages: '',
+    webDevelopment: '',
+    databaseManagement: '',
+    cloudComputing: '',
+    versionControl: '',
+    machineLearning: '',
+    dataAnalysis: '',
+    cybersecurity: '',
   });
 
   // Categorical options for the dropdown
@@ -34,11 +31,11 @@ const SoftSkillsForm = () => {
   ];
 
   // Array of skills that will use numerical ratings
-  const numericSkills = ['communication', 'problemSolving', 'timeManagement'];
+  const numericSkills = ['programmingLanguages', 'webDevelopment', 'databaseManagement'];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setSoftSkills((prevState) => ({
+    setTechnicalSkills((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -46,37 +43,24 @@ const SoftSkillsForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Show confirmation dialog
-    const isConfirmed = window.confirm('Do you want to submit your soft skills?');
-
-    if (isConfirmed) {
-      console.log('Submitted Soft Skills:', softSkills);
+    console.log('Submitted Technical Skills:', technicalSkills);
+    const res = await axios.post('http://127.0.0.1:8080/api/technical', {data:technicalSkills,token:localStorage.getItem("userConfig")});
+    if (res.status == 201) {
       
-      try {
-        const { data } = await axios.post('http://127.0.0.1:8080/api/softskills', {data:softSkills,token:localStorage.getItem("userConfig")});
-        if (data.status === 201) {
-          console.log(data);
-          navigate('/dashboard', { replace: true });
-        } else {
-          console.log("Error in submission");
-        }
-      } catch (error) {
-        console.error("Error during API call", error);
-      }
-    } else {
-      console.log('Submission canceled');
-    }
+      navigate('/dashboard', { replace: true });
+  } else {
+      console.log("Error");
+}
   };
 
   return (
-    <div className="soft-skills-form-container">
-      <h2 className="form-title">Soft Skills Form</h2>
-      <form onSubmit={handleSubmit} className="soft-skills-form">
-        {Object.entries(softSkills).map(([skill, value]) => (
+    <div className="technical-skills-form-container">
+      <h2 className="form-title">Technical Skills Assessment</h2>
+      <form onSubmit={handleSubmit} className="technical-skills-form">
+        {Object.entries(technicalSkills).map(([skill, value]) => (
           <div className="form-group" key={skill}>
             <label htmlFor={skill} className="form-label">
-              {skill.charAt(0).toUpperCase() + skill.slice(1).replace(/([A-Z])/g, ' $1')}
+              {skill.charAt(0).toUpperCase() + skill.slice(1).replace(/([A-Z])/g, ' ')}
             </label>
             {numericSkills.includes(skill) ? (
               <select
@@ -119,4 +103,4 @@ const SoftSkillsForm = () => {
   );
 };
 
-export default SoftSkillsForm;
+export default TechnicalSkillsForm;

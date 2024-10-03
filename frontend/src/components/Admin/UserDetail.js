@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import './style.css'
 import { Button } from "@material-ui/core";
 
-function UserDetails() {
+function UserDetails({setClick}) {
     const [alluser, setAllUser] = useState([]);
     const [state, setState] = useState(false);
     const token = localStorage.getItem("adminConfig");
@@ -116,7 +116,7 @@ function UserDetails() {
                             <tbody>
                                 {alluser.map((item, key) => {
                                     return (
-                                        <tr key={key} className="bg-gray-800">
+                                        <tr key={key} className="bg-gray-800 " onClick={()=>setClick(item._id)}>
                                             <td className="p-3">
                                                 <div className="flex align-items-center">
                                                     <div className="ml-1">

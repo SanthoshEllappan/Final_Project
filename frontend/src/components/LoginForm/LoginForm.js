@@ -96,7 +96,7 @@ export default function SignIn() {
             } else if (data.status === 201) {
                 console.log(data);
                 auth.login(data);
-                navigate('/', { replace: true });
+                navigate('/dashboard', { replace: true });
             } else {
                 setFormError({ error: data.message });
             }
@@ -203,9 +203,7 @@ export default function SignIn() {
                                         {formError.error}
                                     </Typography>
                                 )}
-                             <p className="small fw-bold mt-2 pt-1 mb-0 text-center">
-    Don't have an account? <Link to="/signup" className="link-danger">Register</Link>
-</p>
+                             
                             </form>
                         </Grid>
                     </Grid>

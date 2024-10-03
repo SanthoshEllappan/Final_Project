@@ -53,7 +53,7 @@ const Header = () => {
             }}
           />
         )}
-        <h1 style={{ margin: 0 }}>Welcome, {auth.user ? auth.user.data.name : "Guest"}</h1>
+        <h1 style={{ margin: 0 }}>Welcome, {localStorage.getItem('name') ? localStorage.getItem('name') : "Guest"}</h1>
       </div>
       
       {/* Search Bar */}

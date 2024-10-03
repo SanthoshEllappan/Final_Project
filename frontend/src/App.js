@@ -2,9 +2,10 @@ import { Routes, Route } from 'react-router-dom';
 import EmployeeIntro from './components/Home/Home';
 import Certifications from './components/Certifications';
 import SoftSkillsForm from './components/softskills';
-import SkillsAssessment from './components/SkillsAssessment';
-import TrainingDevelopment from './components/TrainingDevelopment';
-import ProjectsAchievements from './components/ProjectsAchievements';
+import TechnicalSkillsForm from './components/technicalskils';
+import ProjectSkillsForm from './components/projects';
+import AchievementsForm from './components/Achievements';
+import CoursesForm from './components/Courses';
 import EmployeeDetailsForm from './components/personaldetails';
 import AddUser from './components/Admin/AddUser';
 import AdminHome from './components/Admin/AdminHome';
@@ -25,9 +26,10 @@ const App = () => {
           <Route path="dashboard" element={<EmployeeDashboard />} /> {/* Dashboard route */}
           <Route path="certifications" element={<Certifications />} />
           <Route path="soft" element={<SoftSkillsForm />} />
-          <Route path="skills-assessment" element={<SkillsAssessment />} />
-          <Route path="training-development" element={<TrainingDevelopment />} />
-          <Route path="projects-achievements" element={<ProjectsAchievements />} />
+          <Route path="technical" element={<TechnicalSkillsForm />} />
+          <Route path="projects" element={<ProjectSkillsForm />} />
+          <Route path="courses" element={<CoursesForm />} />
+          <Route path="achievements" element={<AchievementsForm />} />
           <Route path="details" element={<EmployeeDetailsForm />} />
           <Route path="*" element={<h1>No page available</h1>} />
         </Route>
