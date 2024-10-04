@@ -9,6 +9,7 @@ import CoursesForm from './components/Courses';
 import EmployeeDetailsForm from './components/personaldetails';
 import AddUser from './components/Admin/AddUser';
 import AdminHome from './components/Admin/AdminHome';
+import Home from "./components/Admin/home"
 import EditUser from './components/Admin/EditUser';
 import { ProtRouteAdmin } from './components/auth/ProtRouteAdmin';
 import { ProtRouteUser } from './components/auth/ProtRouteUser';
@@ -33,7 +34,8 @@ const App = () => {
           <Route path="details" element={<EmployeeDetailsForm />} />
           <Route path="*" element={<h1>No page available</h1>} />
         </Route>
-        <Route path='/admin' element={<ProtRouteAdmin><AdminHome /></ProtRouteAdmin>} />
+        <Route path='/admin' element={<ProtRouteAdmin><Home /></ProtRouteAdmin>} />
+        <Route path='/admin/adminHome' element={<ProtRouteAdmin><AdminHome /></ProtRouteAdmin>} />
         <Route path='/admin/addUser' element={<ProtRouteAdmin><AddUser /></ProtRouteAdmin>} />
         <Route path='/admin/editUser' element={<ProtRouteAdmin><EditUser /></ProtRouteAdmin>} />
       </Routes>

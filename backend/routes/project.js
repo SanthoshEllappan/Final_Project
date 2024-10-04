@@ -6,9 +6,9 @@ const projectSkillController = require('../controllers/project');
 
 // Define the routes for Project Skills
 router.post('/', projectSkillController.createProjectSkill);
-router.get('/', projectSkillController.getAllProjectSkills);
+router.get('/all', projectSkillController.getAllProjectSkills);
 router.get('/:userId', projectSkillController.getProjectSkillById);
-router.put('/:id', projectSkillController.updateProjectSkill);
+router.put('/', projectSkillController.updateProjectSkill);
 router.delete('/:id', projectSkillController.deleteProjectSkill);
 
 module.exports = router;

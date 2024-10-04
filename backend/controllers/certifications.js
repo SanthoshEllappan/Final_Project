@@ -25,3 +25,13 @@ exports.getCertifications = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// Get all ProjectSkills
+exports.getAllCertifications = async (req, res) => {
+  try {
+    const certifications = await Certification.find();
+    res.status(200).json(certifications);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching Project Skills', error });
+  }
+};

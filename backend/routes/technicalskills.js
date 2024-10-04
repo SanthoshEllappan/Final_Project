@@ -5,14 +5,15 @@ const {
   getTechnicalSkillById,
   updateTechnicalSkill,
   deleteTechnicalSkill,
+  getTechnicalSkillByIdadmin,
 } = require('../controllers/technicalskills');
 
 const router = express.Router();
 
 router.post('/', createTechnicalSkill);            // Create a new Technical Skill
-router.get('/', getAllTechnicalSkills);            // Get all Technical Skills
-router.get('/:userId', getTechnicalSkillById);         // Get a Technical Skill by ID
-router.put('/:id', updateTechnicalSkill);          // Update a Technical Skill
+router.get('/all', getAllTechnicalSkills);            // Get all Technical Skills
+router.get('/', getTechnicalSkillById);         // Get a Technical Skill by ID
+router.put('/', updateTechnicalSkill);          // Update a Technical Skill
 router.delete('/:id', deleteTechnicalSkill);       // Delete a Technical Skill
-
+router.get('/:userId',getTechnicalSkillByIdadmin)
 module.exports = router;

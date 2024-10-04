@@ -10,6 +10,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
     const user = { email: "admin123@admin.com", password:"admin123" }
 
     if (user.email == email && user.password == password) {
+        console.log(generateToken(user));
         res.json({
             status: 201,
             message: 'good',

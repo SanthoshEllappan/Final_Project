@@ -17,7 +17,7 @@ exports.addAchievement = async (req, res) => {
 
 // Get all achievements
 exports.getAchievements = async (req, res) => {
-  console.log("Asdfasfad")
+
   const {userId} = req.params
   try {
     console.log(userId)
@@ -26,5 +26,15 @@ exports.getAchievements = async (req, res) => {
     res.status(200).json(achievements);
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+
+exports.getAllAchievements = async (req, res) => {
+  try {
+    const Achievements = await Achievement.find();
+    res.status(200).json(Achievements);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching Project Skills', error });
   }
 };

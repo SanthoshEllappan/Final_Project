@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import './ProjectSkillsForm.css'; // Ensure to import the CSS file
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+
 const ProjectSkillsForm = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [projectSkills, setProjectSkills] = useState({
     softwareEngineerProjects: '',
     consultantProjects: '',
@@ -17,38 +18,20 @@ const ProjectSkillsForm = () => {
     favoriteProject: '',
   });
 
-  // Dropdown options for project types
+  const [isConfirmVisible, setIsConfirmVisible] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [submissionMessage, setSubmissionMessage] = useState("");
+
   const projectTypes = [
-    'Full Stack Development',
-    'Data Analysis',
-    'Data Engineering',
-    'Data Science',
-    'Machine Learning',
-    'Web Development',
-    'Mobile Development',
-    'Cybersecurity',
-    'Cloud Solutions',
-    'Other',
+    'Full Stack Development', 'Data Analysis', 'Data Engineering', 'Data Science',
+    'Machine Learning', 'Web Development', 'Mobile Development', 'Cybersecurity',
+    'Cloud Solutions', 'Other',
   ];
 
-  // Sample tools used in projects
   const tools = [
-    'Python',
-    'JavaScript',
-    'Java',
-    'SQL',
-    'R',
-    'Node.js',
-    'React',
-    'Django',
-    'Tableau',
-    'AWS',
-    'Azure',
-    'GCP',
-    'Docker',
-    'Kubernetes',
-    'Git',
-    'Other',
+    'Python', 'JavaScript', 'Java', 'SQL', 'R', 'Node.js', 'React', 'Django', 
+    'Tableau', 'AWS', 'Azure', 'GCP', 'Docker', 'Kubernetes', 'Git', 'Other',
   ];
 
   const handleChange = (e) => {
@@ -59,193 +42,120 @@ const ProjectSkillsForm = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Submitted Project Skills:', projectSkills);
-    const res = await axios.post('http://127.0.0.1:8080/api/project',{data:projectSkills,token:localStorage.getItem("userConfig")});
-    if (res.status == 201) {
-      
-      navigate('/dashboard', { replace: true });
-  } else {
-      console.log("Error");
-}
+    setIsConfirmVisible(true); // Show confirmation dialog
+  };
+
+  const confirmSubmission = async () => {
+    setIsLoading(true);
+    setIsConfirmVisible(false);
+
+    try {
+      const { data, status } = await axios.put('http://127.0.0.1:8080/api/project', {
+        data: projectSkills,
+        token: localStorage.getItem("userConfig"),
+      });
+
+      if (status === 201) {
+        setSubmissionMessage("Project skills submitted successfully!");
+        setIsSubmitted(true);
+        setIsLoading(false);
+        setTimeout(() => {
+          navigate('/dashboard', { replace: true });
+        }, 3000); // Redirect after 3 seconds
+      } else if(status ==200){
+        setSubmissionMessage("Successfully updated the Project skills form!"); // Success message
+        setIsSubmitted(true); // Trigger the success message view
+        setIsLoading(false); // Stop loading
+
+        setTimeout(() => {
+          navigate('/dashboard', { replace: true });
+        }, 3000); // Redirect after 3 seconds
+      } else {
+        console.log("Error: Form submission failed.");
+        setSubmissionMessage("Error occurred during submission.");
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("API submission error:", error);
+      setSubmissionMessage("Error occurred during submission.");
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="project-skills-form-container">
       <h2 className="form-title">Project Skills Assessment</h2>
-      <form onSubmit={handleSubmit} className="project-skills-form">
-        <div className="form-group">
-          <label htmlFor="softwareEngineerProjects" className="form-label">
-            Number of Projects Worked as Software Engineer
-          </label>
-          <input
-            type="number"
-            id="softwareEngineerProjects"
-            name="softwareEngineerProjects"
-            value={projectSkills.softwareEngineerProjects}
-            onChange={handleChange}
-            required
-            className="form-input"
-            min="0"
-          />
-        </div>
 
-        <div className="form-group">
-          <label htmlFor="consultantProjects" className="form-label">
-            Number of Projects Worked as Consultant
-          </label>
-          <input
-            type="number"
-            id="consultantProjects"
-            name="consultantProjects"
-            value={projectSkills.consultantProjects}
-            onChange={handleChange}
-            required
-            className="form-input"
-            min="0"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="fullStackProjects" className="form-label">
-            Number of Full Stack Projects
-          </label>
-          <input
-            type="number"
-            id="fullStackProjects"
-            name="fullStackProjects"
-            value={projectSkills.fullStackProjects}
-            onChange={handleChange}
-            required
-            className="form-input"
-            min="0"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="dataAnalystProjects" className="form-label">
-            Number of Data Analyst Projects
-          </label>
-          <input
-            type="number"
-            id="dataAnalystProjects"
-            name="dataAnalystProjects"
-            value={projectSkills.dataAnalystProjects}
-            onChange={handleChange}
-            required
-            className="form-input"
-            min="0"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="dataEngineerProjects" className="form-label">
-            Number of Data Engineer Projects
-          </label>
-          <input
-            type="number"
-            id="dataEngineerProjects"
-            name="dataEngineerProjects"
-            value={projectSkills.dataEngineerProjects}
-            onChange={handleChange}
-            required
-            className="form-input"
-            min="0"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="dataScienceProjects" className="form-label">
-            Number of Data Science Projects
-          </label>
-          <input
-            type="number"
-            id="dataScienceProjects"
-            name="dataScienceProjects"
-            value={projectSkills.dataScienceProjects}
-            onChange={handleChange}
-            required
-            className="form-input"
-            min="0"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="otherProjects" className="form-label">
-            Number of Other Projects
-          </label>
-          <input
-            type="number"
-            id="otherProjects"
-            name="otherProjects"
-            value={projectSkills.otherProjects}
-            onChange={handleChange}
-            required
-            className="form-input"
-            min="0"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="projectType" className="form-label">
-            Type of Projects Worked On
-          </label>
-          <select
-            id="projectType"
-            name="projectType"
-            value={projectSkills.projectType}
-            onChange={handleChange}
-            required
-            className="form-input"
-          >
-            <option value="" disabled>Select Project Type</option>
-            {projectTypes.map((type, index) => (
-              <option key={index} value={type}>
-                {type}
-              </option>
+      {!isSubmitted ? (
+        <>
+          <form onSubmit={handleSubmit} className="project-skills-form">
+            {Object.keys(projectSkills).map((skill, index) => (
+              <div className="form-group" key={index}>
+                <label htmlFor={skill} className="form-label">
+                  {skill.charAt(0).toUpperCase() + skill.slice(1).replace(/([A-Z])/g, ' $1')}
+                </label>
+                {skill === 'projectType' ? (
+                  <select
+                    id={skill}
+                    name={skill}
+                    value={projectSkills[skill]}
+                    onChange={handleChange}
+                    required
+                    className="form-input"
+                  >
+                    <option value="" disabled>Select Project Type</option>
+                    {projectTypes.map((type, index) => (
+                      <option key={index} value={type}>{type}</option>
+                    ))}
+                  </select>
+                ) : skill === 'toolsUsed' ? (
+                  <select
+                    id={skill}
+                    name={skill}
+                    value={projectSkills[skill]}
+                    onChange={handleChange}
+                    required
+                    className="form-input"
+                  >
+                    <option value="" disabled>Select Tools Used</option>
+                    {tools.map((tool, index) => (
+                      <option key={index} value={tool}>{tool}</option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    type={skill.includes('Projects') ? "number" : "text"}
+                    id={skill}
+                    name={skill}
+                    value={projectSkills[skill]}
+                    onChange={handleChange}
+                    required
+                    className="form-input"
+                    min={skill.includes('Projects') ? "0" : undefined}
+                  />
+                )}
+              </div>
             ))}
-          </select>
-        </div>
+            <button type="submit" className="submit-button">Submit</button>
+          </form>
 
-        <div className="form-group">
-          <label htmlFor="toolsUsed" className="form-label">
-            Tools Used in Projects
-          </label>
-          <select
-            id="toolsUsed"
-            name="toolsUsed"
-            value={projectSkills.toolsUsed}
-            onChange={handleChange}
-            required
-            className="form-input"
-          >
-            <option value="" disabled>Select Tools Used</option>
-            {tools.map((tool, index) => (
-              <option key={index} value={tool}>
-                {tool}
-              </option>
-            ))}
-          </select>
+          {isConfirmVisible && (
+            <div className="confirmation-card">
+              <p>Do you want to submit your project skills?</p>
+              <button className="confirm-button" onClick={confirmSubmission}>Yes, Submit</button>
+              <button className="cancel-button" onClick={() => setIsConfirmVisible(false)}>Cancel</button>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="success-message">
+          <p>{submissionMessage}</p>
         </div>
+      )}
 
-        <div className="form-group">
-          <label htmlFor="favoriteProject" className="form-label">
-            What was Your Favorite Project?
-          </label>
-          <input
-            type="text"
-            id="favoriteProject"
-            name="favoriteProject"
-            value={projectSkills.favoriteProject}
-            onChange={handleChange}
-            required
-            className="form-input"
-          />
-        </div>
-
-        <button type="submit" className="submit-button">Submit</button>
-      </form>
+      {isLoading && <div className="loading">Submitting...</div>}
     </div>
   );
 };

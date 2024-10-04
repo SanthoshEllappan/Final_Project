@@ -42,19 +42,38 @@ exports.getProjectSkillById = async (req, res) => {
 };
 
 
-
-// Update a ProjectSkill by ID
 exports.updateProjectSkill = async (req, res) => {
   try {
-    const updatedProjectSkill = await ProjectSkill.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!updatedProjectSkill) {
-      return res.status(404).json({ message: 'Project Skill not found' });
+    const { token } = req.body; // Extract the token from the request body
+    const { id: userId } = jwt.verify(token, process.env.JWT_SECRET); // Verify the token to get the user ID
+
+    // Find the soft skills entry by userId (instead of the entry ID from params)
+    let Project = await ProjectSkill.findOne({ userId });
+
+    if (Project) {
+      // Update the existing soft skills entry
+      const { data } = req.body; // Extract the data from the request body
+ 
+      // Update soft skills with new data
+      Object.keys(data).forEach((key) => {
+          Project[key] = data[key];
+      });
+
+      // // Save the updated soft skills entry
+      await Project.save();
+      return res.status(200).json({ message: 'Soft skills entry updated successfully', ProjectSkill });
+    } else {
+      // If no entry exists, create a new one
+      const newProjectSkill = new ProjectSkill({ ...req.body.data, userId });
+      await newProjectSkill.save();
+      return res.status(201).json({ message: 'Soft skills entry created successfully', softSkills: newSoftSkills });
     }
-    res.status(200).json({ message: 'Project Skill updated successfully!', updatedProjectSkill });
+    
   } catch (error) {
-    res.status(400).json({ message: 'Error updating Project Skill', error });
+    res.status(400).json({ message: 'Error updating or creating soft skills entry', error: error.message });
   }
 };
+
 
 // Delete a ProjectSkill by ID
 exports.deleteProjectSkill = async (req, res) => {

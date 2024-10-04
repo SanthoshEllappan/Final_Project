@@ -89,7 +89,7 @@ function UserDetails({setClick}) {
 
     return (
         <>
-            <div className="flex min-h-screen w-full bg-gray-900" style={{ display: 'flex', justifyContent: 'space-around' }}>
+            <div className="flex min-h-screen w-full bg-gray-900" style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div className="col-span-5 w-full">
                     <div className="overflow-auto lg:overflow-visible w-full">
                         <h1 className="text-white  justify-center text-center font-bold p-8">

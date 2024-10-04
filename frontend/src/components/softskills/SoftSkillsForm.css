@@ -1,61 +1,101 @@
+/* Confirmation Card */
+.confirmation-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  text-align: center;
+}
+
+.confirm-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.cancel-button {
+  background-color: #5774d1;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.success-message {
+  color: #28a745;
+  font-size: 18px;
+  margin-top: 20px;
+  text-align: center;
+}
+
 .soft-skills-form-container {
-    max-width: 1200px; /* Adjusted to match your card layout */
-    margin: 0 auto;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-  }
-  
-  .form-title {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  .soft-skills-form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .form-group {
-    display: flex; /* Use flexbox for alignment */
-    align-items: center; /* Center items vertically */
-    margin-bottom: 15px; /* Space between form groups */
-  }
-  
-  .form-label {
-    flex: 0.5; /* Takes up 1 part of the flex container */
-    font-weight: bold;
-    color: #555;
-    margin-right: 5px; /* Small space between label and input */
-  }
-  
-  .form-input {
-    flex: 2; /* Takes up 2 parts of the flex container */
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    transition: border-color 0.3s;
-  }
-  
-  .form-input:focus {
-    border-color: #007bff;
-    outline: none;
-  }
-  
-  .submit-button {
-    padding: 10px 15px;
-    border-radius: 4px;
-    border: none;
-    background: #007bff;
-    color: #fff;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background 0.3s;
-  }
-  
-  .submit-button:hover {
-    background: #0056b3;
-  }
-  
+  max-width: 1200px; 
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.form-title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.soft-skills-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  display: flex; /* Use flexbox for alignment */
+  align-items: center; /* Center items vertically */
+  margin-bottom: 15px; /* Space between form groups */
+}
+
+.form-label {
+  flex: 0.5; /* Takes up 1 part of the flex container */
+  font-weight: bold;
+  color: #555;
+  margin-right: 5px; /* Small space between label and input */
+}
+
+.form-input {
+  flex: 2; /* Takes up 2 parts of the flex container */
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s;
+}
+
+.form-input:focus {
+  border-color: #5e48ac;
+  outline: none;
+}
+
+.submit-button {
+  padding: 10px 15px;
+  border-radius: 4px;
+  border: none;
+  background: #8b4ab6;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.submit-button:hover {
+  background: #0056b3;
+}

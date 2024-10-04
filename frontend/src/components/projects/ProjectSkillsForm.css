@@ -64,4 +64,68 @@ body {
   .submit-button:hover {
     background-color: #0056b3; /* Darker blue on hover */
   }
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4; /* Light background for contrast */
+    margin: 0;
+    padding: 0;
+  }
+  
+  .project-skills-form-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 40px auto;
+    background-color: #fff; /* White background for form */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 20px;
+  }
+  
+  .form-title {
+    text-align: center;
+    color: #333; /* Darker title */
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+  
+  .project-skills-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group {
+    margin-bottom: 15px; /* Space between form groups */
+  }
+  
+  .form-label {
+    font-weight: bold;
+    color: #555; /* Slightly lighter label color */
+  }
+  
+  .form-input {
+    padding: 10px;
+    border: 1px solid #ccc; /* Border for inputs */
+    border-radius: 5px; /* Rounded corners */
+    transition: border-color 0.3s; /* Smooth transition */
+  }
+  
+  .form-input:focus {
+    border-color: #007bff; /* Blue border on focus */
+    outline: none; /* Remove default outline */
+  }
+  
+  .submit-button {
+    background-color: #007bff; /* Primary button color */
+    color: white; /* White text */
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s; /* Smooth transition */
+  }
+  
+  .submit-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
   
