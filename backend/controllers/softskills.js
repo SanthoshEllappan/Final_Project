@@ -41,6 +41,7 @@ const updateSoftSkills = async (req, res) => {
       return res.status(200).json({ message: 'Soft skills entry updated successfully', softSkills });
     } else {
       // If no entry exists, create a new one
+      
       const newSoftSkills = new SoftSkills({ ...req.body.data, userId });
       await newSoftSkills.save();
       return res.status(201).json({ message: 'Soft skills entry created successfully', softSkills: newSoftSkills });

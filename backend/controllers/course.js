@@ -26,17 +26,24 @@ exports.getAllCourses = async (req, res) => {
   }
 };
 
-// Get a Course by ID
+
+
+// Retrieve a soft skills entry by ID
 exports.getCourseById = async (req, res) => {
-    const {userId} = req.params
+  const {userId} = req.query
+  const { id } = jwt.verify(userId, process.env.JWT_SECRET);
+  
   try {
-    const course = await Course.findOne({userId:userId});
-    if (!course) {
-      return res.status(404).json({ message: 'Course not found' });
+    console.log("djf")
+    const CourseEntry = await Course.findOne({userId:id});
+    
+    if (!CourseEntry) {
+      return res.status(404).json({ message: 'Soft skills entry not found' });
     }
-    res.status(200).json(course);
+    
+    res.status(200).json(CourseEntry);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching course', error });
+    res.status(500).json({ message: 'Error retrieving soft skills entry', error: error.message });
   }
 };
 
@@ -66,3 +73,19 @@ exports.deleteCourse = async (req, res) => {
     res.status(500).json({ message: 'Error deleting course', error });
   }
 };
+
+
+exports.getCourse = async (req, res) => {
+
+  const {userId} = req.params
+  try {
+    console.log(userId)
+    const Courses = await Course.findOne({userId:userId});
+    console.log(Course);
+    res.status(200).json(Courses);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+

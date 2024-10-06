@@ -35,3 +35,22 @@ exports.getAllCertifications = async (req, res) => {
     res.status(500).json({ message: 'Error fetching Project Skills', error });
   }
 };
+
+
+// Retrieve a soft skills entry by ID
+exports.getCertificationsById = async (req, res) => {
+  const {userId} = req.query
+  const { id } = jwt.verify(userId, process.env.JWT_SECRET);
+  console.log("djf")
+  try {
+    const CertificationsEntry = await Certification.findOne({userId:id});
+    
+    if (!CertificationsEntry) {
+      return res.status(404).json({ message: 'Soft skills entry not found' });
+    }
+    
+    res.status(200).json(CertificationsEntry);
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving soft skills entry', error: error.message });
+  }
+};

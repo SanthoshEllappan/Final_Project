@@ -25,37 +25,118 @@ exports.getEmployees = async (req, res) => {
   }
 };
 
-// Retrieve an employee entry by ID
 exports.getEmployeeById = async (req, res) => {
   try {
-    const { id } = req.params;
-    const employee = await Employee.findById(id);
-    
+    console.log("Get Employee By ID Function Called");
+    const {userId} = req.query
+    const { id } = jwt.verify(userId, process.env.JWT_SECRET);
+   
+ // Verify the token to get the user ID
+    console.log("User ID:",id);
+
+    // Find the employee by userId
+    const employee = await Employee.findOne({userId:id});
+    console.log("Employee Found:", employee);
+
     if (!employee) {
       return res.status(404).json({ message: 'Employee not found' });
     }
-    
+
     res.status(200).json(employee);
   } catch (error) {
+    console.error("Error Retrieving Employee:", error.message); // Log the error for debugging
     res.status(500).json({ message: 'Error retrieving employee', error: error.message });
   }
 };
 
-// Update an employee entry by ID
+
+
+
+
+
+
+// Update an existing soft skills entry
+// exports.updateEmployee = async (req, res) => {
+//   try {
+//     console.log("dhdh")
+//     const { token } = req.body; 
+//     console.log(token)// Extract the token from the request body
+//     const { id: userId } = jwt.verify(token, process.env.JWT_SECRET); // Verify the token to get the user ID
+//     console.log(userId)
+//     // Find the soft skills entry by userId (instead of the entry ID from params)
+//     let employee = await Employee.findOne({ userId });
+//     console.log(employee )
+//     console.log("Form Data Being Sent:", data);
+//     if (employee) {
+//       // Update the existing soft skills entry
+//       const { data } = req.body; // Extract the data from the request body
+//       console.log(data)
+//       // Update soft skills with new data
+//       Object.keys(data).forEach((key) => {
+//           employee[key] = data[key];
+//       });
+
+//       // // Save the updated soft skills entry
+//       await employee.save();
+//       return res.status(200).json({ message: 'Personal details entry updated successfully', employee });
+//     } else {
+      
+
+//       // If no entry exists, create a new one
+//       const newemployee = new employee({ ...req.body.data, userId });
+      
+//       await newemployee.save();
+//       return res.status(201).json({ message: 'Employee created successfully', employee: newemployee });
+//     }
+    
+//   } catch (error) {
+//     res.status(400).json({ message: 'Error updating or creating soft skills entry', error: error.message });
+//   }
+// };
+
+
+
+ // Ensure you have the correct path to your Employee model
+
 exports.updateEmployee = async (req, res) => {
   try {
-    const { id } = req.params;
-    const employee = await Employee.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
+    console.log("Update Employee Function Called");
     
-    if (!employee) {
-      return res.status(404).json({ message: 'Employee not found' });
+    const { token } = req.body; // Extract the token from the request body
+    console.log("Token Received:", token);
+    
+    const { id: userId } = jwt.verify(token, process.env.JWT_SECRET); // Verify the token to get the user ID
+    console.log("User ID:", userId);
+    
+    // Find the soft skills entry by userId
+    let employee = await Employee.findOne({ userId });
+    console.log("Employee Found:", employee);
+    
+    const requestData = req.body.data; // Extract the data from the request body
+    console.log("Form Data Being Sent:", requestData);
+    
+    if (employee) {
+      // Update the existing soft skills entry
+      Object.keys(requestData).forEach((key) => {
+        employee[key] = requestData[key];
+      });
+
+      // Save the updated soft skills entry
+      await employee.save();
+      return res.status(200).json({ message: 'Personal details entry updated successfully', employee });
+    } else {
+      // If no entry exists, create a new one
+      const newEmployee = new Employee({ ...requestData, userId });
+      
+      await newEmployee.save();
+      return res.status(201).json({ message: 'Employee created successfully', employee: newEmployee });
     }
-    
-    res.status(200).json({ message: 'Employee updated successfully', employee });
   } catch (error) {
-    res.status(400).json({ message: 'Error updating employee', error: error.message });
+    console.error("Error Updating Employee:", error.message); // Log the error for debugging
+    res.status(400).json({ message: 'Error updating or creating soft skills entry', error: error.message });
   }
 };
+
 
 // Delete an employee entry by ID
 exports.deleteEmployee = async (req, res) => {

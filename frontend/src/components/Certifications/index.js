@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
-import './CertificationsForm.css'; // Ensure to import the CSS file
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap
 import { useNavigate } from 'react-router-dom';
 
 const CertificationsForm = () => {
@@ -18,7 +19,7 @@ const CertificationsForm = () => {
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false); // For loading indication
-  const [submissionMessage, setSubmissionMessage] = useState(""); // Success or failure messages
+  const [submissionMessage, setSubmissionMessage] = useState(''); // Success or failure messages
 
   // Dropdown options for specializations
   const specializations = [
@@ -53,34 +54,35 @@ const CertificationsForm = () => {
     try {
       const res = await axios.post('http://127.0.0.1:8080/api/certifications/certifications', {
         data: certifications,
-        token: localStorage.getItem("userConfig"),
+        token: localStorage.getItem('userConfig'),
       });
 
       if (res.status === 201) {
-        setSubmissionMessage("Successfully submitted the certifications form!"); // Success message
+        setSubmissionMessage('Successfully submitted the certifications form!');
         setIsSubmitted(true); // Trigger the success message view
         setTimeout(() => {
           navigate('/dashboard', { replace: true });
         }, 3000); // Redirect after 3 seconds
       } else {
-        setSubmissionMessage("Error occurred during form submission.");
+        setSubmissionMessage('Error occurred during form submission.');
       }
     } catch (error) {
-      console.error("Submission error:", error);
-      setSubmissionMessage("Error occurred during form submission.");
+      console.error('Submission error:', error);
+      setSubmissionMessage('Error occurred during form submission.');
     } finally {
       setIsLoading(false); // Stop loading
     }
   };
 
   return (
-    <div className="certifications-form-container">
-      <h2 className="form-title">Certifications Assessment</h2>
+    <div className="container mt-5">
+      <h2 className="mb-4">Certifications Form</h2>
 
       {!isSubmitted ? (
-        <>
-          <form onSubmit={handleSubmit} className="certifications-form">
-            <div className="form-group">
+        <form onSubmit={handleSubmit}>
+          <div className="row">
+            {/* Left side (3 fields) */}
+            <div className="col-md-6 mb-3">
               <label htmlFor="certificationTitle" className="form-label">
                 Certification Title
               </label>
@@ -91,11 +93,11 @@ const CertificationsForm = () => {
                 value={certifications.certificationTitle}
                 onChange={handleChange}
                 required
-                className="form-input"
+                className="form-control"
               />
             </div>
 
-            <div className="form-group">
+            <div className="col-md-6 mb-3">
               <label htmlFor="platform" className="form-label">
                 Platform
               </label>
@@ -106,11 +108,11 @@ const CertificationsForm = () => {
                 value={certifications.platform}
                 onChange={handleChange}
                 required
-                className="form-input"
+                className="form-control"
               />
             </div>
 
-            <div className="form-group">
+            <div className="col-md-6 mb-3">
               <label htmlFor="specialization" className="form-label">
                 Specialization
               </label>
@@ -120,9 +122,11 @@ const CertificationsForm = () => {
                 value={certifications.specialization}
                 onChange={handleChange}
                 required
-                className="form-input"
+                className="form-select"
               >
-                <option value="" disabled>Select Specialization</option>
+                <option value="" disabled>
+                  Select Specialization
+                </option>
                 {specializations.map((spec, index) => (
                   <option key={index} value={spec}>
                     {spec}
@@ -131,7 +135,8 @@ const CertificationsForm = () => {
               </select>
             </div>
 
-            <div className="form-group">
+            {/* Right side (3 fields) */}
+            <div className="col-md-6 mb-3">
               <label htmlFor="dateObtained" className="form-label">
                 Date Obtained
               </label>
@@ -142,11 +147,11 @@ const CertificationsForm = () => {
                 value={certifications.dateObtained}
                 onChange={handleChange}
                 required
-                className="form-input"
+                className="form-control"
               />
             </div>
 
-            <div className="form-group">
+            <div className="col-md-6 mb-3">
               <label htmlFor="duration" className="form-label">
                 Duration (in hours)
               </label>
@@ -157,11 +162,11 @@ const CertificationsForm = () => {
                 value={certifications.duration}
                 onChange={handleChange}
                 required
-                className="form-input"
+                className="form-control"
               />
             </div>
 
-            <div className="form-group">
+            <div className="col-md-6 mb-3">
               <label htmlFor="additionalCertifications" className="form-label">
                 Additional Certifications (comma-separated)
               </label>
@@ -171,28 +176,56 @@ const CertificationsForm = () => {
                 name="additionalCertifications"
                 value={certifications.additionalCertifications}
                 onChange={handleChange}
-                className="form-input"
+                className="form-control"
               />
             </div>
+          </div>
 
-            <button type="submit" className="submit-button">Submit</button>
-          </form>
-
-          {isConfirmVisible && (
-            <div className="confirmation-card">
-              <p>Do you want to submit your certifications?</p>
-              <button className="confirm-button" onClick={confirmSubmission}>Yes, Submit</button>
-              <button className="cancel-button" onClick={() => setIsConfirmVisible(false)}>Cancel</button>
-            </div>
-          )}
-        </>
+          <button type="submit" className="btn btn-primary">
+            Submit
+          </button>
+        </form>
       ) : (
-        <div className="success-message">
-          <p>{submissionMessage}</p>
-        </div>
+        <div className="alert alert-success mt-4">{submissionMessage}</div>
       )}
 
       {isLoading && <div className="loading">Submitting...</div>}
+
+      {isConfirmVisible && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 1000,
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: '#fff',
+              padding: '20px',
+              borderRadius: '8px',
+              boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+              textAlign: 'center',
+              width: '400px',
+            }}
+          >
+            <h5>Are you sure you want to submit?</h5>
+            <button className="btn btn-secondary me-3" onClick={confirmSubmission}>
+              Yes
+            </button>
+            <button className="btn btn-danger" onClick={() => setIsConfirmVisible(false)}>
+              No
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

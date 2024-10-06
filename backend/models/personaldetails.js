@@ -4,16 +4,26 @@ const mongoose = require('mongoose');
 const employeeSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  phone: { type: String, required: true },
-  position: { type: String, required: true },
-  department: { type: String, required: true },
-  startDate: { type: Date, required: true },
-  dateOfBirth: { type: Date, required: true },
-  gender: { type: String, required: true },
-  address: { type: String, required: true },
-  employmentStatus: { type: String, required: true },
-  skills: { type: String, required: true },
-});
+  email: { type: String, required: true },
+  phone: { type: String, required: true, match: [/^\d{10}$/, 'Invalid phone number'] },
+  position: { type: String },
+  department: { type: String },
+  startDate: { type: Date },
+  dateOfBirth: { type: Date },
+  gender: { type: String },
+  address: { type: String },
+  employmentStatus: { type: String },
+  userId:{
+    type:mongoose.Schema.Types.ObjectId,
+    required:true
+  }
+},
+{timestamps: true // Automatically adds createdAt and updatedAt fields
+  });
 
-module.exports = mongoose.model('Employee', employeeSchema);
+// Create the model
+const Employee = mongoose.model('Employee', employeeSchema);
+
+// Export the model
+module.exports = Employee;
+

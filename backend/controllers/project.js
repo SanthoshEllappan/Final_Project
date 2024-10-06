@@ -28,10 +28,11 @@ exports.getAllProjectSkills = async (req, res) => {
 
 // Get a ProjectSkill by ID
 exports.getProjectSkillById = async (req, res) => {
-  const {userId} = req.params
+  const {userId} = req.query
+  const { id } = jwt.verify(userId, process.env.JWT_SECRET);
   try {
 
-    const projectSkill = await ProjectSkill.findOne({userId:userId});
+    const projectSkill = await ProjectSkill.findOne({userId:id});
     if (!projectSkill) {
       return res.status(404).json({ message: 'Project Skill not found' });
     }

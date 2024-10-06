@@ -16,10 +16,10 @@ route.post("/", createEmployee);
 route.get("/", getEmployees);
 
 // Route to get a specific employee by ID
-route.get("/:userId", getEmployeeById);
+route.get("/byid", getEmployeeById);
 
 // Route to update an employee by ID
-route.put("/:id", updateEmployee);
+route.put("/", updateEmployee);
 
 // Route to delete an employee by ID
 route.delete("/:id", deleteEmployee);

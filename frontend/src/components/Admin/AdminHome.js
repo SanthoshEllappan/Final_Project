@@ -28,6 +28,8 @@ export default function AdminHome() {
                 console.log('Achievements:', achievementsResponse.data);
                 setAchievements([achievementsResponse.data]);
 
+                
+
                 // Fetch certifications
                 const certificationsResponse = await axios.get(`http://127.0.0.1:8080/api/certifications/${id}`);
                 console.log('Certifications:', certificationsResponse.data);
@@ -51,6 +53,7 @@ export default function AdminHome() {
                 const technicalSkillsResponse = await axios.get(`http://127.0.0.1:8080/api/technical/${id}`);
                 console.log('Technical Skills:', technicalSkillsResponse.data);
                 setTechnicalSkills([technicalSkillsResponse.data]);
+                
             }
             setLoading(false);
         } catch (error) {
@@ -82,61 +85,90 @@ export default function AdminHome() {
                     </div>
                 ) : (
                     <div>
-                        <h2>Achievements</h2>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Title</th>
-                                    <th>Organization</th>
-                                    <th>Date Achieved</th>
-                                    <th>Description</th>
-                                    <th>Category</th>
-                                    <th>Additional Achievements</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {Array.isArray(achievements) && achievements.length > 0 ? (
-                                    achievements.map((achievement) => (
-                                        <tr key={achievement._id}>
-                                            <td>{achievement.achievementTitle}</td>
-                                            <td>{achievement.organization}</td>
-                                            <td>{new Date(achievement.dateAchieved).toLocaleDateString()}</td>
-                                            <td>{achievement.description}</td>
-                                            <td>{achievement.category}</td>
-                                            <td>{achievement.additionalAchievements}</td>
-                                        </tr>
-                                    ))
-                                ) : <p>No achievements available.</p>}
-                            </tbody>
-                        </table>
+                        <h2>Soft Skills</h2>
+                    <div className="p-grid">
+                        {softSkills.map((skill, index) => (
+                            <div className="p-col-12 p-md-4" key={index}>
+                                <Card title={`Skill ${index + 1}`} style={{ marginBottom: '20px' }}>
+                                    <p>Communication: {skill.communication}</p>
+                                    <p>Teamwork: {skill.teamwork}</p>
+                                    <p>Problem Solving: {skill.problemSolving}</p>
+                                    <p>Adaptability: {skill.adaptability}</p>
+                                    <p>Time Management: {skill.timeManagement}</p>
+                                    <p>Critical Thinking: {skill.criticalThinking}</p>
+                                    <p>Creativity: {skill.creativity}</p>
+                                    <p>Leadership: {skill.leadership}</p>
+                                    <p>Interpersonal Skills: {skill.interpersonalSkills}</p>
+                                    <p>Emotional Intelligence: {skill.emotionalIntelligence}</p>
+                                </Card>
+                            </div>
+                        ))}
+                    </div>
 
-                        {/* Similar table structure for Certifications, Courses, Project Skills, Soft Skills, Technical Skills */}
-                        {/* Certifications Table */}
-                        <h2>Certifications</h2>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Title</th>
-                                    <th>Platform</th>
-                                    <th>Specialization</th>
-                                    <th>Date Obtained</th>
-                                    <th>Duration</th>
-                                    <th>Additional Certifications</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {certifications.length > 0 && certifications.map((certification) => (
-                                    <tr key={certification._id}>
-                                        <td>{certification.certificationTitle}</td>
-                                        <td>{certification.platform}</td>
-                                        <td>{certification.specialization}</td>
-                                        <td>{new Date(certification.dateObtained).toLocaleDateString()}</td>
-                                        <td>{certification.duration} months</td>
-                                        <td>{certification.additionalCertifications}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                    {/* Technical Skills DataTable */}
+                    <h2>Technical Skills</h2>
+                    <DataTable value={technicalSkills} paginator rows={5}>
+                        <Column field="programmingLanguages" header="Programming Languages" />
+                        <Column field="webDevelopment" header="Web Development" />
+                        <Column field="databaseManagement" header="Database Management" />
+                        <Column field="cloudComputing" header="Cloud Computing" />
+                        <Column field="versionControl" header="Version Control" />
+                        <Column field="machineLearning" header="Machine Learning" />
+                        <Column field="dataAnalysis" header="Data Analysis" />
+                        <Column field="cybersecurity" header="Cybersecurity" />
+                    </DataTable>
+
+                    {/* Project Skills DataTable */}
+                    <h2>Project Skills</h2>
+                    <DataTable value={projectSkills} paginator rows={5}>
+                        <Column field="projectType" header="Project Type" />
+                        <Column field="softwareEngineerProjects" header="Software Engineer Projects" />
+                        <Column field="consultantProjects" header="Consultant Projects" />
+                        <Column field="fullStackProjects" header="Full Stack Projects" />
+                        <Column field="dataAnalystProjects" header="Data Analyst Projects" />
+                        <Column field="dataEngineerProjects" header="Data Engineer Projects" />
+                        <Column field="dataScienceProjects" header="Data Science Projects" />
+                        <Column field="otherProjects" header="Other Projects" />
+                        <Column field="toolsUsed" header="Tools Used" />
+                        <Column field="favoriteProject" header="Favorite Project" />
+                    </DataTable>
+
+                    {/* Courses DataTable */}
+                    <h2>Courses</h2>
+                    <DataTable value={courses} paginator rows={5}>
+                        <Column field="courseName" header="Course Name" />
+                        <Column field="platform" header="Platform" />
+                        <Column field="specialization" header="Specialization" />
+                        <Column field="totalCourses" header="Total Courses" />
+                        <Column field="courseDuration" header="Duration (Months)" />
+                        <Column field="courseType" header="Course Type" />
+                        <Column field="completionStatus" header="Completion Status" />
+                        <Column field="additionalCourses" header="Additional Courses" />
+                        <Column field="createdAt" header="Created At" body={(rowData) => new Date(rowData.createdAt).toLocaleDateString()} />
+                    </DataTable>
+
+                    {/* Achievements DataTable */}
+                    <h2>Achievements</h2>
+                    <DataTable value={achievements} paginator rows={5}>
+                        <Column field="achievementTitle" header="Title" />
+                        <Column field="organization" header="Organization" />
+                        <Column field="dateAchieved" header="Date Achieved" body={(rowData) => new Date(rowData.dateAchieved).toLocaleDateString()} />
+                        <Column field="description" header="Description" />
+                        <Column field="category" header="Category" />
+                        <Column field="additionalAchievements" header="Additional Achievements" />
+                    </DataTable>
+
+                    {/* Certifications DataTable */}
+                    <h2>Certifications</h2>
+                    <DataTable value={certifications} paginator rows={5}>
+                        <Column field="certificationTitle" header="Title" />
+                        <Column field="platform" header="Platform" />
+                        <Column field="specialization" header="Specialization" />
+                        <Column field="duration" header="Duration (Months)" />
+                        <Column field="additionalCertifications" header="Additional Certifications" />
+                        <Column field="dateObtained" header="Date Obtained" body={(rowData) => new Date(rowData.dateObtained).toLocaleDateString()} />
+                    </DataTable>
+                        
 
                         {/* Similar table structures for Courses, Project Skills, Soft Skills, and Technical Skills */}
                     </div>
@@ -145,3 +177,6 @@ export default function AdminHome() {
         </div>
     );
 }
+
+
+
