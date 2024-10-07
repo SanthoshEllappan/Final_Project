@@ -16,7 +16,8 @@ import { ProtRouteUser } from './components/auth/ProtRouteUser';
 import { AuthProvider } from './components/AuthRouter';
 import SignUp from './components/SignUp/SignUpForm';
 import EmployeeDashboard from './components//Home/EmployeeDashboard'; // Import your dashboard component
-
+import Details from './components/Home/details'
+import AdminDetails from './components/Admin/details'
 
 const App = () => {
   return (
@@ -32,9 +33,11 @@ const App = () => {
           <Route path="courses" element={<CoursesForm />} />
           <Route path="achievements" element={<AchievementsForm />} />
           <Route path="details" element={<EmployeeDetailsForm />} />
+          <Route path="empdetails" element={<Details />} />
           <Route path="*" element={<h1>No page available</h1>} />
         </Route>
         <Route path='/admin' element={<ProtRouteAdmin><Home /></ProtRouteAdmin>} />
+        <Route path='/admindetails' element={<ProtRouteAdmin><AdminDetails /></ProtRouteAdmin>} />
         <Route path='/admin/adminHome' element={<ProtRouteAdmin><AdminHome /></ProtRouteAdmin>} />
         <Route path='/admin/addUser' element={<ProtRouteAdmin><AddUser /></ProtRouteAdmin>} />
         <Route path='/admin/editUser' element={<ProtRouteAdmin><EditUser /></ProtRouteAdmin>} />

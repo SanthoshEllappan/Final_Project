@@ -71,7 +71,7 @@ const ProjectSkillsForm = () => {
   const confirmSubmission = async () => {
     setIsLoading(true);
     setIsConfirmVisible(false);
-
+    
     try {
       const { data, status } = await axios.put('http://127.0.0.1:8080/api/project', {
         data: projectSkills,

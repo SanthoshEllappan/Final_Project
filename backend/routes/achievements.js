@@ -1,5 +1,5 @@
 const express = require('express');
-const { addAchievement, getAchievements,getAllAchievements, getAchievementsById } = require('../controllers/achievements');
+const { addAchievement, getAchievements,getAllAchievements, getAchievementsById, updateAchievements } = require('../controllers/achievements');
 const router = express.Router();
 
 // POST route to add an achievement
@@ -9,4 +9,5 @@ router.post('/achievements', addAchievement);
 router.get('/achievements/:userId', getAchievements);
 router.get('/all', getAllAchievements);
 router.get('/id', getAchievementsById); 
+router.put('/up', updateAchievements)
 module.exports = router;

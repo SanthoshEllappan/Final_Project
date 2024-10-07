@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import Header from './header';
 import Sidebar from './navbar';
 import { Outlet } from 'react-router-dom'; 
-import EmployeeDashboard from './EmployeeDashboard'; // Import the dashboard
+ // Import the dashboard
 
 const EmployeeIntro = () => {
   const location = useLocation();
@@ -17,7 +17,7 @@ const EmployeeIntro = () => {
       <div style={{ display: 'flex', flexGrow: 1 }}>
         <Sidebar />
         <main className="main-content" style={{ flexGrow: 1, padding: '20px' }}>
-          {location.pathname === '/dashboard' && <EmployeeDashboard />} {/* Only show dashboard on its specific route */}
+          {location.pathname === '/dashboard' }   
           <Outlet /> 
         </main>
       </div>

@@ -1,29 +1,29 @@
 
 import React, { useState } from 'react';
-import axios from 'axios'; // Add axios for API calls
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 
 const EmployeeDetailsForm = () => {
-  const navigate = useNavigate(); // Initialize navigate hook
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
     position: '',
-    department: '',
+    employeeid: '',
     startDate: '',
     dateOfBirth: '',
     gender: '',
     address: '',
-    employmentStatus: '', // Added employmentStatus to form data
+    employmentStatus: '',
   });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [submissionMessage, setSubmissionMessage] = useState('');
-  const [isConfirmVisible, setIsConfirmVisible] = useState(false); // State for confirmation modal
+  const [isConfirmVisible, setIsConfirmVisible] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,38 +35,36 @@ const EmployeeDetailsForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsConfirmVisible(true); // Show confirmation modal instead of submitting directly
+    setIsConfirmVisible(true);
   };
 
-  // Confirm submission
   const confirmSubmission = async () => {
     setIsConfirmVisible(false);
-    setIsLoading(true); // Show loading spinner
-    setIsSubmitted(false); // Reset submission status
+    setIsLoading(true);
+    setIsSubmitted(false);
 
     try {
-      console.log("Form Data Being Submitted:", formData); // Log form data
+      console.log("Form Data Being Submitted:", formData);
 
-      const { data, status } = await axios.put('http://127.0.0.1:8080/api/personal', {
+      const { data, status } = await axios.put('http://127.0.0.1:8080/api/personal/new', {
         data: formData,
-        token: localStorage.getItem("userConfig"), // Get token from localStorage
+        token: localStorage.getItem("userConfig"),
       });
 
       if (status === 201) {
-        setSubmissionMessage("Employee details successfully submitted!"); // Success message for creation
-        setIsSubmitted(true); // Show success state
+        setSubmissionMessage("Employee details successfully submitted!");
+        setIsSubmitted(true);
       } else if (status === 200) {
-        setSubmissionMessage("Employee details successfully updated!"); // Success for update
-        setIsSubmitted(true); // Show success state
+        setSubmissionMessage("Employee details successfully updated!");
+        setIsSubmitted(true);
       } else {
-        setSubmissionMessage("An error occurred during submission."); // Generic error
+        setSubmissionMessage("An error occurred during submission.");
       }
     } catch (error) {
       console.error("Error submitting employee details:", error.response || error.message);
-      setSubmissionMessage("Error occurred during submission."); // Error message for user
+      setSubmissionMessage("Error occurred during submission.");
     } finally {
-      setIsLoading(false); // Hide loading spinner after the operation
-      // Redirect to dashboard after 3 seconds
+      setIsLoading(false);
       setTimeout(() => {
         navigate('/dashboard', { replace: true });
       }, 3000);
@@ -76,7 +74,7 @@ const EmployeeDetailsForm = () => {
   return (
     <div className="container mt-5">
       <h2 className="mb-4">Employee Personal Details</h2>
-      
+
       {!isSubmitted ? (
         <>
           <form onSubmit={handleSubmit}>
@@ -105,6 +103,7 @@ const EmployeeDetailsForm = () => {
                   required 
                 />
               </div>
+              
             </div>
 
             <div className="mb-3">
@@ -147,13 +146,13 @@ const EmployeeDetailsForm = () => {
                 />
               </div>
               <div className="col-md-6 mb-3">
-                <label htmlFor="department" className="form-label">Department</label>
+                <label htmlFor="employeeid" className="form-label">Employee ID</label>
                 <input 
                   type="text" 
                   className="form-control" 
-                  id="department" 
-                  name="department" 
-                  value={formData.department} 
+                  id="employeeid" 
+                  name="employeeid" 
+                  value={formData.employeeid} 
                   onChange={handleChange} 
                   required 
                 />
@@ -215,7 +214,6 @@ const EmployeeDetailsForm = () => {
               ></textarea>
             </div>
 
-            {/* Employment Status Dropdown */}
             <div className="mb-3">
               <label htmlFor="employmentStatus" className="form-label">Employment Status</label>
               <select 
@@ -283,3 +281,4 @@ const EmployeeDetailsForm = () => {
 };
 
 export default EmployeeDetailsForm;
+

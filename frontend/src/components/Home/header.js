@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button } from 'primereact/button';
 import { Link } from 'react-router-dom';
 import { AuthUser } from '../AuthRouter';
-import { RiHome2Line, RiSettings2Line, RiQuestionLine } from 'react-icons/ri'; // Example icons
+import { RiInformationLine,RiHome2Line, RiSettings2Line, RiQuestionLine } from 'react-icons/ri'; // Example icons
 
 const Header = () => {
   const auth = AuthUser();
@@ -91,6 +91,14 @@ const Header = () => {
         }}>
           <RiHome2Line style={{ marginRight: '5px' }} /> Home
         </Link>
+        <Link to="/empdetails" style={{
+          color: 'white',
+          margin: '0 15px',
+          display: 'flex',
+          alignItems: 'center',
+          textDecoration: 'none',
+          fontWeight: '500'
+        }}>   <RiInformationLine style={{ marginRight: '5px' }} /> Details     </Link>
         <Link to="/settings" style={{
           color: 'white',
           margin: '0 15px',

@@ -7,7 +7,7 @@ const employeeSchema = new mongoose.Schema({
   email: { type: String, required: true },
   phone: { type: String, required: true, match: [/^\d{10}$/, 'Invalid phone number'] },
   position: { type: String },
-  department: { type: String },
+  employeeid:{type: String, required: true},
   startDate: { type: Date },
   dateOfBirth: { type: Date },
   gender: { type: String },

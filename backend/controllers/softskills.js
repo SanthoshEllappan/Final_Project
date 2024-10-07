@@ -74,7 +74,7 @@ const getSoftSkillsById = async (req, res) => {
     const softSkillsEntry = await SoftSkills.findOne({userId:id});
     
     if (!softSkillsEntry) {
-      return res.status(404).json({ message: 'Soft skills entry not found' });
+      return res.status(200).json({});
     }
     
     res.status(200).json(softSkillsEntry);

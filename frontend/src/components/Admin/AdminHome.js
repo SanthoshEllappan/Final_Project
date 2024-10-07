@@ -1,59 +1,62 @@
 
+
+
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import UserDetails from './UserDetail';
 import AdminHeader from './AdminNav';
 import Sidebar from './sidebar';
-// import Header from './Header'; // Import the Header component
+import { Card } from 'primereact/card';
+
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import 'primereact/resources/themes/lara-light-indigo/theme.css'; 
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
+import './index.css';
 
 export default function AdminHome() {
     const [click, setClick] = useState('');
+    const [employeeData, setEmployeeData] = useState(null);
     const [achievements, setAchievements] = useState([]);
     const [certifications, setCertifications] = useState([]);
     const [course, setCourse] = useState(null);
     const [projectSkill, setProjectSkill] = useState(null);
-    const [softSkills, setSoftSkills] = useState(null);
+    const [softSkills, setSoftSkills] = useState([]);
     const [technicalSkills, setTechnicalSkills] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Fetch data from the backend
     const fetchData = async () => {
         try {
             if (click !== '') {
                 const id = click;
-
-                // Fetch achievements
                 const achievementsResponse = await axios.get(`http://127.0.0.1:8080/api/achievements/achievements/${id}`);
-                console.log('Achievements:', achievementsResponse.data);
                 setAchievements([achievementsResponse.data]);
 
-                
-
-                // Fetch certifications
                 const certificationsResponse = await axios.get(`http://127.0.0.1:8080/api/certifications/${id}`);
-                console.log('Certifications:', certificationsResponse.data);
                 setCertifications([certificationsResponse.data]);
 
                 const courseResponse = await axios.get(`http://127.0.0.1:8080/api/courses/${id}`);
-                console.log('Course:', courseResponse.data);
                 setCourse([courseResponse.data]);
 
-                // Fetch project skills
                 const projectSkillResponse = await axios.get(`http://127.0.0.1:8080/api/project/${id}`);
-                console.log('Project Skills:', projectSkillResponse.data);
                 setProjectSkill([projectSkillResponse.data]);
 
-                // Fetch soft skills
                 const softSkillsResponse = await axios.get(`http://127.0.0.1:8080/api/softskills/${id}`);
-                console.log('Soft Skills:', softSkillsResponse.data);
                 setSoftSkills([softSkillsResponse.data]);
 
-                // Fetch technical skills
                 const technicalSkillsResponse = await axios.get(`http://127.0.0.1:8080/api/technical/${id}`);
-                console.log('Technical Skills:', technicalSkillsResponse.data);
                 setTechnicalSkills([technicalSkillsResponse.data]);
+
                 
+        // Fetch employee data
+        const employeeResponse = await axios.get('http://127.0.0.1:8080/api/personal/admin', {
+            params: { id }
+          });
+          setEmployeeData([employeeResponse.data]);
+// console.log(employeeResponse.data)
+
             }
             setLoading(false);
         } catch (error) {
@@ -62,121 +65,114 @@ export default function AdminHome() {
         }
     };
 
-    // Use useEffect to call the API when the component mounts
     useEffect(() => {
         fetchData();
     }, [click]);
 
-    if (loading) return <div>Loading...</div>; // Show loading state
-    if (error) return <div>Error: {error}</div>; // Show error message
+    if (loading) return <div className="loading">Loading...</div>;
+    if (error) return <div className="error">Error: {error}</div>;
 
     return (
-        <div>
-            <AdminHeader/>
-            {/* <AdminNav /> Admin Navigation */}
-            {
-                click === '' ? (
-                    <div style={{
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                      }}>
-                        <Sidebar/>
+        <div className="admin-home">
+            <AdminHeader />
+            <div className="content-wrapper">
+                {click === '' ? (
+                    <div className="layout">
+                        <Sidebar />
                         <UserDetails setClick={setClick} />
                     </div>
                 ) : (
-                    <div>
-                        <h2>Soft Skills</h2>
-                    <div className="p-grid">
-                        {softSkills.map((skill, index) => (
-                            <div className="p-col-12 p-md-4" key={index}>
-                                <Card title={`Skill ${index + 1}`} style={{ marginBottom: '20px' }}>
-                                    <p>Communication: {skill.communication}</p>
-                                    <p>Teamwork: {skill.teamwork}</p>
-                                    <p>Problem Solving: {skill.problemSolving}</p>
-                                    <p>Adaptability: {skill.adaptability}</p>
-                                    <p>Time Management: {skill.timeManagement}</p>
-                                    <p>Critical Thinking: {skill.criticalThinking}</p>
-                                    <p>Creativity: {skill.creativity}</p>
-                                    <p>Leadership: {skill.leadership}</p>
-                                    <p>Interpersonal Skills: {skill.interpersonalSkills}</p>
-                                    <p>Emotional Intelligence: {skill.emotionalIntelligence}</p>
-                                </Card>
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Technical Skills DataTable */}
-                    <h2>Technical Skills</h2>
-                    <DataTable value={technicalSkills} paginator rows={5}>
-                        <Column field="programmingLanguages" header="Programming Languages" />
-                        <Column field="webDevelopment" header="Web Development" />
-                        <Column field="databaseManagement" header="Database Management" />
-                        <Column field="cloudComputing" header="Cloud Computing" />
-                        <Column field="versionControl" header="Version Control" />
-                        <Column field="machineLearning" header="Machine Learning" />
-                        <Column field="dataAnalysis" header="Data Analysis" />
-                        <Column field="cybersecurity" header="Cybersecurity" />
-                    </DataTable>
-
-                    {/* Project Skills DataTable */}
-                    <h2>Project Skills</h2>
-                    <DataTable value={projectSkills} paginator rows={5}>
-                        <Column field="projectType" header="Project Type" />
-                        <Column field="softwareEngineerProjects" header="Software Engineer Projects" />
-                        <Column field="consultantProjects" header="Consultant Projects" />
-                        <Column field="fullStackProjects" header="Full Stack Projects" />
-                        <Column field="dataAnalystProjects" header="Data Analyst Projects" />
-                        <Column field="dataEngineerProjects" header="Data Engineer Projects" />
-                        <Column field="dataScienceProjects" header="Data Science Projects" />
-                        <Column field="otherProjects" header="Other Projects" />
-                        <Column field="toolsUsed" header="Tools Used" />
-                        <Column field="favoriteProject" header="Favorite Project" />
-                    </DataTable>
-
-                    {/* Courses DataTable */}
-                    <h2>Courses</h2>
-                    <DataTable value={courses} paginator rows={5}>
-                        <Column field="courseName" header="Course Name" />
-                        <Column field="platform" header="Platform" />
-                        <Column field="specialization" header="Specialization" />
-                        <Column field="totalCourses" header="Total Courses" />
-                        <Column field="courseDuration" header="Duration (Months)" />
-                        <Column field="courseType" header="Course Type" />
-                        <Column field="completionStatus" header="Completion Status" />
-                        <Column field="additionalCourses" header="Additional Courses" />
-                        <Column field="createdAt" header="Created At" body={(rowData) => new Date(rowData.createdAt).toLocaleDateString()} />
-                    </DataTable>
-
-                    {/* Achievements DataTable */}
-                    <h2>Achievements</h2>
-                    <DataTable value={achievements} paginator rows={5}>
-                        <Column field="achievementTitle" header="Title" />
-                        <Column field="organization" header="Organization" />
-                        <Column field="dateAchieved" header="Date Achieved" body={(rowData) => new Date(rowData.dateAchieved).toLocaleDateString()} />
-                        <Column field="description" header="Description" />
-                        <Column field="category" header="Category" />
-                        <Column field="additionalAchievements" header="Additional Achievements" />
-                    </DataTable>
-
-                    {/* Certifications DataTable */}
-                    <h2>Certifications</h2>
-                    <DataTable value={certifications} paginator rows={5}>
-                        <Column field="certificationTitle" header="Title" />
-                        <Column field="platform" header="Platform" />
-                        <Column field="specialization" header="Specialization" />
-                        <Column field="duration" header="Duration (Months)" />
-                        <Column field="additionalCertifications" header="Additional Certifications" />
-                        <Column field="dateObtained" header="Date Obtained" body={(rowData) => new Date(rowData.dateObtained).toLocaleDateString()} />
-                    </DataTable>
+                    <div className="data-content">
                         
+                        <h2>Employee Details</h2>
+                    <DataTable value={employeeData} responsiveLayout="scroll">
+                        <Column field="employeeid" header="Employee ID" />
+                        <Column field="firstName" header="First Name" />
+                        <Column field="lastName" header="Last Name" />
+                        <Column field="email" header="Email" />
+                        <Column field="phone" header="Phone" />
+                        <Column field="position" header="Position" />
+                        <Column field="startDate" header="Start Date" body={data => new Date(data.startDate).toLocaleDateString()} />
+                        <Column field="dateOfBirth" header="Date of Birth" body={data => new Date(data.dateOfBirth).toLocaleDateString()} />
+                        <Column field="gender" header="Gender" />
+                        
+                        <Column field="employmentStatus" header="Employment Status" />
+                
+                        <Column field="createdAt" header="Created At" body={data => new Date(data.createdAt).toLocaleString()} />
+                        <Column field="updatedAt" header="Updated At" body={data => new Date(data.updatedAt).toLocaleString()} />
+                    </DataTable>
+                        <h2 className="section-title">Soft Skills</h2>
+                        <DataTable value={softSkills} paginator rows={5} responsiveLayout="scroll" className="p-mb-4">
+                            <Column field="communication" header="Communication" />
+                            <Column field="teamwork" header="Teamwork" />
+                            <Column field="problemSolving" header="Problem Solving" />
+                            <Column field="adaptability" header="Adaptability" />
+                            <Column field="timeManagement" header="Time Management" />
+                            <Column field="criticalThinking" header="Critical Thinking" />
+                            <Column field="creativity" header="Creativity" />
+                            <Column field="leadership" header="Leadership" />
+                            <Column field="interpersonalSkills" header="Interpersonal Skills" />
+                            <Column field="emotionalIntelligence" header="Emotional Intelligence" />
+                        </DataTable>
 
-                        {/* Similar table structures for Courses, Project Skills, Soft Skills, and Technical Skills */}
+                        <h2 className="section-title">Technical Skills</h2>
+                        <DataTable value={technicalSkills} paginator rows={5} responsiveLayout="scroll" className="p-mb-4">
+                            <Column field="programmingLanguages" header="Programming Languages" />
+                            <Column field="webDevelopment" header="Web Development" />
+                            <Column field="databaseManagement" header="Database Management" />
+                            <Column field="cloudComputing" header="Cloud Computing" />
+                            <Column field="versionControl" header="Version Control" />
+                            <Column field="machineLearning" header="Machine Learning" />
+                            <Column field="dataAnalysis" header="Data Analysis" />
+                            <Column field="cybersecurity" header="Cybersecurity" />
+                        </DataTable>
+
+                        <h2 className="section-title">Project Skills</h2>
+                        <DataTable value={projectSkill} paginator rows={5} responsiveLayout="scroll" className="p-mb-4">
+                            <Column field="projectType" header="Project Type" />
+                            <Column field="softwareEngineerProjects" header="Software Engineer Projects" />
+                            <Column field="consultantProjects" header="Consultant Projects" />
+                            <Column field="fullStackProjects" header="Full Stack Projects" />
+                            <Column field="dataAnalystProjects" header="Data Analyst Projects" />
+                            <Column field="dataEngineerProjects" header="Data Engineer Projects" />
+                            <Column field="dataScienceProjects" header="Data Science Projects" />
+                            <Column field="toolsUsed" header="Tools Used" />
+                            <Column field="favoriteProject" header="Favorite Project" />
+                        </DataTable>
+
+                        <h2 className="section-title">Courses</h2>
+                        <DataTable value={course} paginator rows={5} responsiveLayout="scroll" className="p-mb-4">
+                            <Column field="courseName" header="Course Name" />
+                            <Column field="platform" header="Platform" />
+                            <Column field="specialization" header="Specialization" />
+                            <Column field="totalCourses" header="Total Courses" />
+                            <Column field="courseDuration" header="Duration (Months)" />
+                            <Column field="completionStatus" header="Completion Status" />
+                            <Column field="createdAt" header="Created At" body={(rowData) => new Date(rowData.createdAt).toLocaleDateString()} />
+                        </DataTable>
+
+                        <h2 className="section-title">Achievements</h2>
+                        <DataTable value={achievements} paginator rows={5} responsiveLayout="scroll" className="p-mb-4">
+                            <Column field="achievementTitle" header="Title" />
+                            <Column field="organization" header="Organization" />
+                            <Column field="dateAchieved" header="Date Achieved" body={(rowData) => new Date(rowData.dateAchieved).toLocaleDateString()} />
+                            <Column field="description" header="Description" />
+                            <Column field="category" header="Category" />
+                        </DataTable>
+
+                        <h2 className="section-title">Certifications</h2>
+                        <DataTable value={certifications} paginator rows={5} responsiveLayout="scroll" className="p-mb-4">
+                            <Column field="certificationTitle" header="Title" />
+                            <Column field="platform" header="Platform" />
+                            <Column field="specialization" header="Specialization" />
+                            <Column field="duration" header="Duration (Months)" />
+                            <Column field="dateObtained" header="Date Obtained" body={(rowData) => new Date(rowData.dateObtained).toLocaleDateString()} />
+                        </DataTable>
+
+
                     </div>
-                )
-            }
+                )}
+            </div>
         </div>
     );
 }
-
-
-

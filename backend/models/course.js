@@ -11,6 +11,7 @@ const CourseSchema = new mongoose.Schema({
   courseType: { type: String, required: true },
   completionStatus: { type: String, required: true },
   additionalCourses: { type: String },
+  verify: { type: Boolean, default: false },
   userId:{
     type:mongoose.Schema.Types.ObjectId,
     required:true

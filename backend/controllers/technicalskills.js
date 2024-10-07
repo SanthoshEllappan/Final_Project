@@ -45,9 +45,9 @@ const getTechnicalSkillById = async (req, res) => {
     const TechnicalSkillsEntry = await TechnicalSkill.findOne({userId:id});
     
     if (!TechnicalSkillsEntry) {
-      return res.status(404).json({ message: 'Technical skills entry not found' });
+      return res.status(200).json({});
     }
-    console.log(TechnicalSkillsEntry)
+    
     res.status(200).json(TechnicalSkillsEntry);
   } catch (error) {
     res.status(500).json({ message: 'Error retrieving Technical skills entry', error: error.message });

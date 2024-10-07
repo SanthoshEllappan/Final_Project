@@ -50,25 +50,29 @@ const AchievementsForm = () => {
     setIsConfirmVisible(false); // Hide confirmation card
 
     try {
-      const res = await axios.post('http://127.0.0.1:8080/api/achievements/achievements', {
+      const { data, status }  = await axios.put('http://127.0.0.1:8080/api/achievements/up', {
         data: achievements,
         token: localStorage.getItem('userConfig'),
       });
 
-      if (res.status === 201) {
-        setSubmissionMessage('Successfully submitted the achievements form!');
+      if (status === 201 || status === 200) {
+        setSubmissionMessage(
+          status === 201 ? 'Successfully submitted the certifications form!' : 'Successfully updated the certifications form!'
+        );
         setIsSubmitted(true); // Trigger the success message view
+        setIsLoading(false); // Stop loading
+
         setTimeout(() => {
           navigate('/dashboard', { replace: true });
         }, 3000); // Redirect after 3 seconds
       } else {
         setSubmissionMessage('Error occurred during form submission.');
+        setIsLoading(false); // Stop loading on failure
       }
     } catch (error) {
       console.error('API submission error:', error);
       setSubmissionMessage('Error occurred during form submission.');
-    } finally {
-      setIsLoading(false); // Stop loading
+      setIsLoading(false); // Stop loading on failure
     }
   };
 
@@ -183,19 +187,6 @@ const AchievementsForm = () => {
             </button>
           </form>
 
-          {isConfirmVisible && (
-            <div className="confirmation-box">
-              <div className="alert alert-warning">
-                <h5>Do you want to submit your achievements?</h5>
-                <button className="btn btn-secondary me-3" onClick={confirmSubmission}>
-                  Yes, Submit
-                </button>
-                <button className="btn btn-danger" onClick={() => setIsConfirmVisible(false)}>
-                  Cancel
-                </button>
-              </div>
-            </div>
-          )}
         </>
       ) : (
         <div className="alert alert-success mt-4">

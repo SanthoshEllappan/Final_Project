@@ -31,10 +31,10 @@ exports.getProjectSkillById = async (req, res) => {
   const {userId} = req.query
   const { id } = jwt.verify(userId, process.env.JWT_SECRET);
   try {
-
+    
     const projectSkill = await ProjectSkill.findOne({userId:id});
     if (!projectSkill) {
-      return res.status(404).json({ message: 'Project Skill not found' });
+      return res.status(200).json({});
     }
     res.status(200).json(projectSkill);
   } catch (error) {
@@ -47,14 +47,13 @@ exports.updateProjectSkill = async (req, res) => {
   try {
     const { token } = req.body; // Extract the token from the request body
     const { id: userId } = jwt.verify(token, process.env.JWT_SECRET); // Verify the token to get the user ID
-
     // Find the soft skills entry by userId (instead of the entry ID from params)
     let Project = await ProjectSkill.findOne({ userId });
-
+    console.log(req.body)
     if (Project) {
       // Update the existing soft skills entry
       const { data } = req.body; // Extract the data from the request body
- 
+     
       // Update soft skills with new data
       Object.keys(data).forEach((key) => {
           Project[key] = data[key];
@@ -62,12 +61,12 @@ exports.updateProjectSkill = async (req, res) => {
 
       // // Save the updated soft skills entry
       await Project.save();
-      return res.status(200).json({ message: 'Soft skills entry updated successfully', ProjectSkill });
+      return res.status(200).json({ message: 'Soft skills entry updated successfully', Project });
     } else {
       // If no entry exists, create a new one
       const newProjectSkill = new ProjectSkill({ ...req.body.data, userId });
       await newProjectSkill.save();
-      return res.status(201).json({ message: 'Soft skills entry created successfully', softSkills: newSoftSkills });
+      return res.status(201).json({ message: 'Soft skills entry created successfully', softSkills: newProjectSkill });
     }
     
   } catch (error) {
@@ -86,5 +85,23 @@ exports.deleteProjectSkill = async (req, res) => {
     res.status(200).json({ message: 'Project Skill deleted successfully!' });
   } catch (error) {
     res.status(500).json({ message: 'Error deleting Project Skill', error });
+  }
+};
+
+
+
+// Retrieve a soft skills entry by ID
+exports.getProjectSkillByIdadmin = async (req, res) => {
+  const {userId} = req.params
+  try {
+    const getProjectSkillByIdadmin = await ProjectSkill.findOne({userId:userId});
+    
+    if (!getProjectSkillByIdadmin) {
+      return res.status(404).json({ message: 'Soft skills entry not found' });
+    }
+    
+    res.status(200).json(getProjectSkillByIdadmin);
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving soft skills entry', error: error.message });
   }
 };

@@ -141,7 +141,7 @@ import React, { useEffect, useState } from 'react';
 import { Button } from 'primereact/button';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthUser } from '../AuthRouter';
-import { RiHome2Line, RiSettings2Line, RiQuestionLine } from 'react-icons/ri'; // Example icons
+import { RiInformationLine,RiHome2Line, RiSettings2Line, RiQuestionLine } from 'react-icons/ri'; // Example icons
 import Swal from 'sweetalert2'; // Import SweetAlert
 
 const AdminHeader = () => {
@@ -262,7 +262,7 @@ const AdminHeader = () => {
           <RiHome2Line style={{ marginRight: '5px' }} /> Home
         </Link>
         <Link
-          to="/settings"
+          to="/admindetails"
           style={{
             color: 'white',
             margin: '0 15px',
@@ -271,11 +271,21 @@ const AdminHeader = () => {
             textDecoration: 'none',
             fontWeight: '500',
           }}
-        >
+          >
+          <RiInformationLine style={{ marginRight: '5px' }} /> Details     </Link>
+        <Link to="/admin" style={{
+          color: 'white',
+          margin: '0 15px',
+          display: 'flex',
+          alignItems: 'center',
+          textDecoration: 'none',
+          fontWeight: '500'
+        }}>
+        
           <RiSettings2Line style={{ marginRight: '5px' }} /> Settings
         </Link>
         <Link
-          to="/help"
+          to="/admin"
           style={{
             color: 'white',
             margin: '0 15px',

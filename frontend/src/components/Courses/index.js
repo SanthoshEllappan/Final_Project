@@ -57,25 +57,30 @@ const CoursesForm = () => {
     setIsConfirmVisible(false); // Hide confirmation dialog
 
     try {
-      const { data, status } = await axios.post('http://127.0.0.1:8080/api/courses', {
+      const { data, status } = await axios.put('http://127.0.0.1:8080/api/courses/up', {
         data: courseDetails,
         token: localStorage.getItem("userConfig"),
       });
-
-      if (status === 201) {
-        setSubmissionMessage("Successfully submitted the courses form!"); // Success message
+      console.log("Hello");
+      
+      if (status === 201 || status === 200) {
+        setSubmissionMessage(
+          status === 201 ? 'Successfully submitted the Course form!' : 'Successfully updated the Course form!'
+        );
         setIsSubmitted(true); // Trigger the success message view
+        setIsLoading(false); // Stop loading
+
         setTimeout(() => {
           navigate('/dashboard', { replace: true });
         }, 3000); // Redirect after 3 seconds
       } else {
-        setSubmissionMessage("Error occurred during form submission.");
+        setSubmissionMessage('Error occurred during form submission.');
+        setIsLoading(false); // Stop loading on failure
       }
     } catch (error) {
-      console.error("API submission error:", error);
-      setSubmissionMessage("Error occurred during form submission.");
-    } finally {
-      setIsLoading(false); // Stop loading
+      console.error('API submission error:', error);
+      setSubmissionMessage('Error occurred during form submission.');
+      setIsLoading(false); // Stop loading on failure
     }
   };
 

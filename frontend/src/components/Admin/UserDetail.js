@@ -17,6 +17,7 @@ function UserDetails({setClick}) {
             .get("http://127.0.0.1:8080/admin/userData", header)
             .then((response) => {
                 setAllUser(response.data.data);
+                console.log(response.data)
             })
             .catch((err) => {
                 console.log(err);

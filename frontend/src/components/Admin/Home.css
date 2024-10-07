@@ -1,0 +1,24 @@
+.even-row {
+    background-color: #f9f9f9;
+}
+
+.odd-row {
+    background-color: #ffffff;
+}
+
+.p-datatable .p-datatable-tbody > tr {
+    border-bottom: 1px solid #e0e0e0; /* Lighter border between rows */
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+    border-right: 1px solid #e0e0e0; /* Vertical grid lines */
+}
+
+.p-datatable-thead > tr > th {
+    background-color: #f0f0f0; /* Header background color */
+    text-align: left;
+}
+
+.p-datatable-tbody > tr:hover {
+    background-color: #e6f7ff; /* Row hover effect */
+}

@@ -2,10 +2,11 @@
 const express = require('express');
 const { 
   createEmployee, 
-  getEmployees, 
+  getAllEmployees, 
   getEmployeeById, 
   updateEmployee, 
-  deleteEmployee 
+  deleteEmployee,
+  getEmployeeByIdAdmin
 } = require('../controllers/personaldetails'); // Adjust the path based on your directory structure
 const route = express.Router();
 
@@ -13,15 +14,16 @@ const route = express.Router();
 route.post("/", createEmployee);
 
 // Route to get all employees
-route.get("/", getEmployees);
+route.get("/all", getAllEmployees);
 
 // Route to get a specific employee by ID
 route.get("/byid", getEmployeeById);
 
 // Route to update an employee by ID
-route.put("/", updateEmployee);
+route.put("/new", updateEmployee);
 
 // Route to delete an employee by ID
 route.delete("/:id", deleteEmployee);
+route.get("/admin", getEmployeeByIdAdmin)
 
 module.exports = route;
