@@ -75,10 +75,10 @@ const Sidebar = () => {
           Admin Functions
         </li>
         {[
-          { name: 'Manage Users', path: '/admin/manage-users', icon: <FaUser /> },
-          { name: 'View Reports', path: '/admin/reports', icon: <FaClipboardList /> },
-          { name: 'Settings', path: '/admin/settings', icon: <FaCog /> },
-          { name: 'Logout', path: '/logout', icon: <FaSignOutAlt /> },
+          { name: 'Manage Users', path: '/kdks', icon: <FaUser /> },
+          { name: 'View Reports', path: '/dskks', icon: <FaClipboardList /> },
+          { name: 'Settings', path: '/djkka', icon: <FaCog /> },
+          { name: 'Logout', path: '/login', icon: <FaSignOutAlt /> },
         ].map(item => (
           <li 
             key={item.path}
