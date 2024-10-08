@@ -1,93 +1,33 @@
-/* employee.css */
-
-/* Basic container styling */
 .dashboard-container {
-  max-width: 1200px;
-  margin: 0 auto;
   padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-family: 'Arial', sans-serif;
 }
 
 .dashboard-title {
   text-align: center;
-  font-size: 24px;
   margin-bottom: 20px;
-  color: #333;
+  color: #1E3A8A;
 }
 
-/* Card container */
-.cards-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
+.custom-card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
   margin-bottom: 20px;
-}
-
-.card {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.card-title {
-  font-size: 18px;
-  margin-bottom: 10px;
-  color: #555;
 }
 
 .card-count {
-  font-size: 36px;
-  font-weight: bold;
-  color: #4CAF50;
+  font-size: 48px;
+  text-align: center;
+  color: #1D4ED8;
 }
 
-.total-courses-card .card-count {
-  color: #007bff;
+.loading {
+  text-align: center;
+  font-size: 24px;
+  color: #4B5563;
 }
 
-.certifications-card p {
-  color: #777;
-  font-size: 16px;
-}
-
-/* Charts section */
-.charts-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-.chart-card {
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.chart-card canvas {
-  width: 100% !important;
-  height: auto !important;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .dashboard-container {
-    padding: 10px;
-  }
-
-  .cards-container {
-    grid-template-columns: 1fr;
-  }
-
-  .charts-container {
-    grid-template-columns: 1fr;
-  }
+.error {
+  text-align: center;
+  color: red;
+  font-size: 18px;
 }

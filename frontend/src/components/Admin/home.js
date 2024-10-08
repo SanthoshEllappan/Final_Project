@@ -1,361 +1,3 @@
-// import React, { useState, useEffect } from 'react';
-// import { Card } from 'primereact/card';
-// import { Chart } from 'primereact/chart';
-// import axios from 'axios';
-// import Header from './AdminNav'; // Assuming you have a Header component for the top navigation
-// import Sidebar from './sidebar'; // Assuming you have a Sidebar component
-// import './Home.css'; // Import the CSS file for custom styles
-
-// const Home = () => {
-//     const [softSkills, setSoftSkills] = useState([]);
-//     const [technicalSkills, setTechnicalSkills] = useState([]);
-//     const [projectSkills, setProjectSkills] = useState([]);
-//     const [courses, setCourses] = useState([]);
-//     const [achievements, setAchievements] = useState([]);
-//     const [certifications, setCertifications] = useState([]);
-//     const [employeeData, setEmployeeData] = useState(null);
-
-//     useEffect(() => {
-//         const fetchData = async () => {
-//             try {
-//                 const responses = await Promise.all([
-//                     axios.get('http://127.0.0.1:8080/api/softskills/all'),
-//                     axios.get('http://127.0.0.1:8080/api/technical/all'),
-//                     axios.get('http://127.0.0.1:8080/api/project/all'),
-//                     axios.get('http://127.0.0.1:8080/api/courses/all'),
-//                     axios.get('http://127.0.0.1:8080/api/achievements/all'),
-//                     axios.get('http://127.0.0.1:8080/api/certifications/certifications/all'),
-//                     axios.get('http://127.0.0.1:8080/api/personal/all'),
-//                 ]);
-
-//                 setSoftSkills(responses[0].data);
-//                 setTechnicalSkills(responses[1].data);
-//                 setProjectSkills(responses[2].data);
-//                 setCourses(responses[3].data);
-//                 setAchievements(responses[4].data);
-//                 setCertifications(responses[5].data);
-//                 setEmployeeData(responses[6].data);
-//             } catch (err) {
-//                 console.error('Error fetching data:', err.message);
-//             }
-//         };
-//         fetchData();
-//     }, []);
-
-//     // Find the employee with the most courses
-// const employeeWithMostCourses = courses.reduce((max, course) => {
-//     if (!max || course.totalCourses > max.totalCourses) {
-//         return course;
-//     }
-//     return max;
-// }, null);
-
-// // Find the corresponding employee name from employeeData using the employeeID
-// const mostCoursesEmployeeName = employeeWithMostCourses 
-//     ? `${employeeData.find(emp => emp.employeeid === employeeWithMostCourses.employeeid)?.employeeName || 'Unknown'} (${employeeWithMostCourses.totalCourses} courses)` 
-//     : 'N/A';
-
-
-//     const competencyLevels = {
-//         beginner: 0,
-//         intermediate: 0,
-//         advanced: 0,
-//     };
-
-//     certifications.forEach(cert => {
-//         if (cert.competencyLevel === 'Beginner') competencyLevels.beginner++;
-//         else if (cert.competencyLevel === 'Intermediate') competencyLevels.intermediate++;
-//         else if (cert.competencyLevel === 'Advanced') competencyLevels.advanced++;
-//     });
-
-//     const calculateSoftSkillsScore = (skill) => {
-//         const numericFields = ['communication', 'problemSolving', 'timeManagement'];
-//         const numericScore = numericFields.reduce((sum, field) => sum + skill[field], 0);
-
-//         const categoricalFields = ['teamwork', 'adaptability', 'criticalThinking', 'creativity', 'leadership', 'interpersonalSkills', 'emotionalIntelligence'];
-//         const categoricalScore = categoricalFields.reduce((sum, field) => {
-//             const proficiencyLevels = [
-//                 'Not at all proficient',
-//                 'Slightly proficient',
-//                 'Moderately proficient',
-//                 'Very proficient',
-//                 'Extremely proficient',
-//                 'Expert',
-//                 'Master',
-//                 'Leader',
-//                 'Innovator',
-//                 'Visionary'
-//             ];
-//             return sum + proficiencyLevels.indexOf(skill[field]);
-//         }, 0);
-
-//         return numericScore + categoricalScore;
-//     };
-
-//     const highestSoftSkills = softSkills.reduce((max, skill) => {
-//         const totalScore = calculateSoftSkillsScore(skill);
-//         return totalScore > max.totalScore ? { ...skill, totalScore } : max;
-//     }, { totalScore: 0 });
-
-//     const calculateTechnicalSkillsScore = (skill) => {
-//         const numericFields = ['programmingLanguages', 'webDevelopment', 'databaseManagement'];
-//         const numericScore = numericFields.reduce((sum, field) => sum + skill[field], 0);
-
-//         const categoricalFields = ['cloudComputing', 'versionControl', 'machineLearning', 'dataAnalysis', 'cybersecurity'];
-//         const categoricalScore = categoricalFields.reduce((sum, field) => {
-//             const proficiencyLevels = [
-//                 'Not at all proficient',
-//                 'Slightly proficient',
-//                 'Moderately proficient',
-//                 'Very proficient',
-//                 'Extremely proficient',
-//                 'Expert',
-//                 'Master',
-//                 'Leader',
-//                 'Innovator',
-//                 'Visionary'
-//             ];
-//             return sum + proficiencyLevels.indexOf(skill[field]);
-//         }, 0);
-
-//         return numericScore + categoricalScore;
-//     };
-
-//     const highestTechnicalSkills = technicalSkills.reduce((max, skill) => {
-//         const totalScore = calculateTechnicalSkillsScore(skill);
-//         return totalScore > max.totalScore ? { ...skill, totalScore } : max;
-//     }, { totalScore: 0 });
-
-//     return (
-//         <div style={{ display: 'flex', height: '100vh' }}>
-//             <Sidebar />
-//             <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-//                 <Header />
-//                 <div className="dashboard-content" style={{ display: 'flex', flexWrap: 'wrap', padding: '20px' }}>
-//                     <Card title="Total Employees" style={{ width: '25%', margin: '1rem' }}>
-//                         <p>Total Employees: {totalEmployees}</p>
-//                     </Card>
-
-//                     <Card title="Top Employee in Courses" style={{ width: '25%', margin: '1rem' }}>
-//                         <p>{mostCoursesEmployeeName}</p>
-//                     </Card>
-
-//                     <Card title="Competency Levels" style={{ width: '25%', margin: '1rem' }}>
-//                         <p>Beginner: {competencyLevels.beginner}</p>
-//                         <p>Intermediate: {competencyLevels.intermediate}</p>
-//                         <p>Advanced: {competencyLevels.advanced}</p>
-//                     </Card>
-
-//                     <Card title="Top Skills" style={{ width: '25%', margin: '1rem' }}>
-//                         <p>Top Soft Skills Employee: {highestSoftSkills.employeeName || 'N/A'} ({highestSoftSkills.totalScore} points)</p>
-//                         <p>Top Technical Skills Employee: {highestTechnicalSkills.employeeName || 'N/A'} ({highestTechnicalSkills.totalScore} points)</p>
-//                     </Card>
-
-//                     <div className="competency-chart" style={{ width: '50%', margin: '1rem' }}>
-//                         <h3>Competency Levels Distribution</h3>
-//                         <Chart
-//                             type="pie"
-//                             data={{
-//                                 labels: ['Beginner', 'Intermediate', 'Advanced'],
-//                                 datasets: [{
-//                                     data: [
-//                                         competencyLevels.beginner,
-//                                         competencyLevels.intermediate,
-//                                         competencyLevels.advanced
-//                                     ],
-//                                     backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726']
-//                                 }]
-//                             }}
-//                         />
-//                     </div>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default Home;
-
-// import React, { useState, useEffect } from 'react';
-// import { Card } from 'primereact/card';
-// import { Chart } from 'primereact/chart';
-// import axios from 'axios';
-// import Header from './AdminNav'; // Assuming you have a Header component for the top navigation
-// import Sidebar from './sidebar'; // Assuming you have a Sidebar component
-// import './Home.css'; // Import the CSS file for custom styles
-
-// const Home = () => {
-//     const [softSkills, setSoftSkills] = useState([]);
-//     const [technicalSkills, setTechnicalSkills] = useState([]);
-//     const [projectSkills, setProjectSkills] = useState([]);
-//     const [courses, setCourses] = useState([]);
-//     const [achievements, setAchievements] = useState([]);
-//     const [certifications, setCertifications] = useState([]);
-//     const [employeeData, setEmployeeData] = useState(null);
-
-//     useEffect(() => {
-//         const fetchData = async () => {
-//             try {
-//                 const responses = await Promise.all([
-//                     axios.get('http://127.0.0.1:8080/api/softskills/all'),
-//                     axios.get('http://127.0.0.1:8080/api/technical/all'),
-//                     axios.get('http://127.0.0.1:8080/api/project/all'),
-//                     axios.get('http://127.0.0.1:8080/api/courses/all'),
-//                     axios.get('http://127.0.0.1:8080/api/achievements/all'),
-//                     axios.get('http://127.0.0.1:8080/api/certifications/certifications/all'),
-//                     axios.get('http://127.0.0.1:8080/api/personal/all'),
-//                 ]);
-
-//                 setSoftSkills(responses[0].data);
-//                 setTechnicalSkills(responses[1].data);
-//                 setProjectSkills(responses[2].data);
-//                 setCourses(responses[3].data);
-//                 setAchievements(responses[4].data);
-//                 setCertifications(responses[5].data);
-//                 setEmployeeData(responses[6].data);
-//             } catch (err) {
-//                 console.error('Error fetching data:', err.message);
-//             }
-//         };
-//         fetchData();
-//     }, []);
-
-//     // Define totalEmployees within the component
-//     const totalEmployees = employeeData ? new Set(employeeData.map(emp => emp.employeeid)).size : 0;
-
-//     // Find employee with the most courses
-//     const employeeWithMostCourses = courses.reduce((max, course) => {
-//         if (!max || course.totalCourses > max.totalCourses) {
-//             return course;
-//         }
-//         return max;
-//     }, null);
-
-//     // Find the corresponding employee name from employeeData using employeeWithMostCourses
-//     const mostCoursesEmployeeName = employeeWithMostCourses
-//         ? `${employeeData.find(emp => emp.employeeid === employeeWithMostCourses.employeeid)?.employeeName || 'Unknown'} (${employeeWithMostCourses.totalCourses} courses)`
-//         : 'N/A';
-
-//     const competencyLevels = {
-//         beginner: 0,
-//         intermediate: 0,
-//         advanced: 0,
-//     };
-
-//     certifications.forEach(cert => {
-//         if (cert.competencyLevel === 'Beginner') competencyLevels.beginner++;
-//         else if (cert.competencyLevel === 'Intermediate') competencyLevels.intermediate++;
-//         else if (cert.competencyLevel === 'Advanced') competencyLevels.advanced++;
-//     });
-
-//     const calculateSoftSkillsScore = (skill) => {
-//         const numericFields = ['communication', 'problemSolving', 'timeManagement'];
-//         const numericScore = numericFields.reduce((sum, field) => sum + skill[field], 0);
-
-//         const categoricalFields = ['teamwork', 'adaptability', 'criticalThinking', 'creativity', 'leadership', 'interpersonalSkills', 'emotionalIntelligence'];
-//         const categoricalScore = categoricalFields.reduce((sum, field) => {
-//             const proficiencyLevels = [
-//                 'Not at all proficient',
-//                 'Slightly proficient',
-//                 'Moderately proficient',
-//                 'Very proficient',
-//                 'Extremely proficient',
-//                 'Expert',
-//                 'Master',
-//                 'Leader',
-//                 'Innovator',
-//                 'Visionary'
-//             ];
-//             return sum + proficiencyLevels.indexOf(skill[field]);
-//         }, 0);
-
-//         return numericScore + categoricalScore;
-//     };
-
-//     const highestSoftSkills = softSkills.reduce((max, skill) => {
-//         const totalScore = calculateSoftSkillsScore(skill);
-//         return totalScore > max.totalScore ? { ...skill, totalScore } : max;
-//     }, { totalScore: 0 });
-
-//     const calculateTechnicalSkillsScore = (skill) => {
-//         const numericFields = ['programmingLanguages', 'webDevelopment', 'databaseManagement'];
-//         const numericScore = numericFields.reduce((sum, field) => sum + skill[field], 0);
-
-//         const categoricalFields = ['cloudComputing', 'versionControl', 'machineLearning', 'dataAnalysis', 'cybersecurity'];
-//         const categoricalScore = categoricalFields.reduce((sum, field) => {
-//             const proficiencyLevels = [
-//                 'Not at all proficient',
-//                 'Slightly proficient',
-//                 'Moderately proficient',
-//                 'Very proficient',
-//                 'Extremely proficient',
-//                 'Expert',
-//                 'Master',
-//                 'Leader',
-//                 'Innovator',
-//                 'Visionary'
-//             ];
-//             return sum + proficiencyLevels.indexOf(skill[field]);
-//         }, 0);
-
-//         return numericScore + categoricalScore;
-//     };
-
-//     const highestTechnicalSkills = technicalSkills.reduce((max, skill) => {
-//         const totalScore = calculateTechnicalSkillsScore(skill);
-//         return totalScore > max.totalScore ? { ...skill, totalScore } : max;
-//     }, { totalScore: 0 });
-
-//     return (
-        
-//         <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-//         <Header />
-//         <div style={{ display: 'flex', flexGrow: 1 }}>
-//             <Sidebar />
-//                 <div className="dashboard-content" style={{ display: 'flex', flexWrap: 'wrap', padding: '20px' }}>
-//                     <Card title="Total Employees" style={{ width: '25%', margin: '1rem' }}>
-//                         <p>Total Employees: {totalEmployees}</p>
-//                     </Card>
-
-//                     <Card title="Top Employee in Courses" style={{ width: '25%', margin: '1rem' }}>
-//                         <p>{mostCoursesEmployeeName}</p>
-//                     </Card>
-
-//                     <Card title="Competency Levels" style={{ width: '25%', margin: '1rem' }}>
-//                         <p>Beginner: {competencyLevels.beginner}</p>
-//                         <p>Intermediate: {competencyLevels.intermediate}</p>
-//                         <p>Advanced: {competencyLevels.advanced}</p>
-//                     </Card>
-
-//                     <Card title="Top Skills" style={{ width: '25%', margin: '1rem' }}>
-//                         <p>Top Soft Skills Employee: {highestSoftSkills.employeeName || 'N/A'} ({highestSoftSkills.totalScore} points)</p>
-//                         <p>Top Technical Skills Employee: {highestTechnicalSkills.employeeName || 'N/A'} ({highestTechnicalSkills.totalScore} points)</p>
-//                     </Card>
-
-//                     <div className="competency-chart" style={{ width: '50%', margin: '1rem' }}>
-//                         <h3>Competency Levels Distribution</h3>
-//                         <Chart
-//                             type="pie"
-//                             data={{
-//                                 labels: ['Beginner', 'Intermediate', 'Advanced'],
-//                                 datasets: [{
-//                                     data: [
-//                                         competencyLevels.beginner,
-//                                         competencyLevels.intermediate,
-//                                         competencyLevels.advanced
-//                                     ],
-//                                     backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726']
-//                                 }]
-//                             }}
-//                         />
-//                     </div>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default Home;
 
 // import React, { useState, useEffect } from 'react';
 // import { Card } from 'primereact/card';
@@ -373,6 +15,19 @@
 //     const [achievements, setAchievements] = useState([]);
 //     const [certifications, setCertifications] = useState([]);
 //     const [employeeData, setEmployeeData] = useState([]);
+
+//     const proficiencyLevels = {
+//         'Not at all proficient': 1,
+//         'Slightly proficient': 2,
+//         'Moderately proficient': 3,
+//         'Very proficient': 4,
+//         'Extremely proficient': 5,
+//         'Expert': 6,
+//         'Master': 7,
+//         'Leader': 8,
+//         'Innovator': 9,
+//         'Visionary': 10
+//     };
 
 //     useEffect(() => {
 //         const fetchData = async () => {
@@ -413,9 +68,52 @@
 //         });
 //     };
 
+
+
+//     const employeeCountByPosition = {};
+//     employeeData.forEach(employee => {
+//         const position = employee.position; // Assuming position field exists
+//         if (employeeCountByPosition[position]) {
+//             employeeCountByPosition[position]++;
+//         } else {
+//             employeeCountByPosition[position] = 1;
+//         }
+//     });
+
+//     const barChartData = {
+//         labels: Object.keys(employeeCountByPosition),
+//         datasets: [{
+//             label: 'Employee Count by Position',
+//             backgroundColor: '#42A5F5',
+//             data: Object.values(employeeCountByPosition),
+//         }]
+//     };
+
+//     // Course completion rate
+//     const completedCourses = courses.filter(course => course.completionStatus).length;
+//     const totalCourses = courses.length;
+//     const completionRate = totalCourses ? (completedCourses / totalCourses) * 100 : 0;
+
+//     // Line chart data - Assume we have a `courseCompletionHistory` array
+//     const courseCompletionHistory = []; // This would come from your API
+//     const lineChartData = {
+//         labels: courseCompletionHistory.map(item => item.dateObtained), // Use appropriate date format
+//         datasets: [{
+//             label: 'Courses Completed Over Time',
+//             data: courseCompletionHistory.map(item => item.completedCourses), // Number of courses completed on that date
+//             fill: false,
+//             borderColor: '#66BB6A',
+//             tension: 0.1,
+//         }]
+//     };
+
+
 //     const enrichedCourses = addEmployeeInfoToData(courses);
 
 //     const totalEmployees = employeeData.length;
+
+//     const fullTimeEmployees = employeeData.filter(emp => emp.employmentStatus === 'full_time').length;
+//     const internEmployees = employeeData.filter(emp => emp.employmentStatus === 'intern').length;
 
 //     const employeeWithMostCourses = enrichedCourses.reduce((max, course) => {
 //         if (!max || course.totalCourses > max.totalCourses) {
@@ -423,6 +121,9 @@
 //         }
 //         return max;
 //     }, null);
+
+
+
 
 //     const mostCoursesEmployeeName = employeeWithMostCourses
 //         ? `${employeeWithMostCourses.employeeName || 'Unknown'} (${employeeWithMostCourses.totalCourses} courses)`
@@ -440,50 +141,23 @@
 //         else if (cert.competencyLevel === 'Advanced') competencyLevels.advanced++;
 //     });
 
-//     // Function to calculate soft skills score
-//     const calculateSoftSkillsScore = (softSkill) => {
-//         // Assuming numerical values are assigned for categorical skills (1-10)
-//         const numericalValues = {
-//             communication: softSkill.communication,
-//             problemSolving: softSkill.problemSolving,
-//             timeManagement: softSkill.timeManagement,
-//             adaptability: softSkill.adaptability === 'Expert' ? 10 : 0, // Add mapping as per requirement
-//             criticalThinking: softSkill.criticalThinking === 'Expert' ? 10 : 0,
-//             creativity: softSkill.creativity === 'Expert' ? 10 : 0,
-//             leadership: softSkill.leadership === 'Expert' ? 10 : 0,
-//             interpersonalSkills: softSkill.interpersonalSkills === 'Expert' ? 10 : 0,
-//             emotionalIntelligence: softSkill.emotionalIntelligence === 'Expert' ? 10 : 0,
-//         };
-
-//         return Object.values(numericalValues).reduce((acc, score) => acc + score, 0);
-//     };
-
-//     // Function to calculate technical skills score
-//     const calculateTechnicalSkillsScore = (technicalSkill) => {
-//         // Assuming numerical values are assigned for technical skills (1-10)
-//         const numericalValues = {
-//             programmingLanguages: technicalSkill.programmingLanguages,
-//             webDevelopment: technicalSkill.webDevelopment,
-//             databaseManagement: technicalSkill.databaseManagement,
-//             cloudComputing: technicalSkill.cloudComputing === 'Expert' ? 10 : 0, // Add mapping as per requirement
-//             versionControl: technicalSkill.versionControl === 'Expert' ? 10 : 0,
-//             machineLearning: technicalSkill.machineLearning === 'Expert' ? 10 : 0,
-//             dataAnalysis: technicalSkill.dataAnalysis === 'Expert' ? 10 : 0,
-//             cybersecurity: technicalSkill.cybersecurity === 'Expert' ? 10 : 0,
-//         };
-
-//         return Object.values(numericalValues).reduce((acc, score) => acc + score, 0);
+//     const calculateSkillScore = (skill, skillType) => {
+//         return Object.keys(skill).reduce((acc, key) => {
+//             const proficiency = skill[key];
+//             const score = proficiencyLevels[proficiency] || 0;
+//             return acc + score;
+//         }, 0);
 //     };
 
 //     const highestSoftSkills = softSkills.reduce((max, skill) => {
-//         const totalScore = calculateSoftSkillsScore(skill);
+//         const totalScore = calculateSkillScore(skill, 'soft');
 //         return totalScore > max.totalScore ? { ...skill, totalScore } : max;
 //     }, { totalScore: 0 });
 
 //     const topSoftSkillsEmployee = getEmployeeInfo(highestSoftSkills.userId);
 
 //     const highestTechnicalSkills = technicalSkills.reduce((max, skill) => {
-//         const totalScore = calculateTechnicalSkillsScore(skill);
+//         const totalScore = calculateSkillScore(skill, 'technical');
 //         return totalScore > max.totalScore ? { ...skill, totalScore } : max;
 //     }, { totalScore: 0 });
 
@@ -491,46 +165,81 @@
 
 //     return (
 //         <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-//         <Header />
-//         <div style={{ display: 'flex', flexGrow: 1 }}>
-//             <Sidebar />
-//                 <div className="dashboard-content" style={{  flexWrap: 'wrap', padding: '20px',flexGrow: 1, padding: '20px' }}>
+//             <Header />
+//             <div style={{ display: 'flex', flexGrow: 1 }}>
+//                 <Sidebar />
+//                 <div className="dashboard-content container-fluid" style={{ padding: '20px' }}>
+//                     <div className="row">
+//                         <div className="col-md-3">
+//                             <Card title="Total Employees" style={{ margin: '1rem' }}>
+//                                 <p>Total Employees: {totalEmployees}</p>
+//                             </Card>
+//                            </div>
+//                         <div className="col-md-3">
+//                             <Card title="Full-Time Employees" style={{ margin: '1rem' }}>
+//                                 <p>Full-Time Employees: {fullTimeEmployees}</p>
+//                             </Card>
+//                         </div>
+//                         <div className="col-md-3">
+//                             <Card title="Intern Employees" style={{ margin: '1rem' }}>
+//                                 <p>Intern Employees: {internEmployees}</p>
+//                             </Card>
+//                         </div>
+//                         <div className="col-md-3">
+//                             <Card title="Highest Courses by employee" style={{ margin: '1rem' }}>
+//                                 <p>{mostCoursesEmployeeName}</p>
+//                             </Card>
+//                         </div>
+//                         <div className="col-md-3">
+//                             <Card title="Competency Levels" style={{ margin: '1rem' }}>
+//                                 <p>Beginner: {competencyLevels.beginner}</p>
+//                                 <p>Intermediate: {competencyLevels.intermediate}</p>
+//                                 <p>Advanced: {competencyLevels.advanced}</p>
+//                             </Card>
+//                         </div>
+//                         <div className="col-md-3">
+//                             <Card title="Top Skills" style={{ margin: '1rem' }}>
+//                                 <p>Top Soft Skills Employee: {topSoftSkillsEmployee.name} ({highestSoftSkills.totalScore} points)</p>
+//                                 <p>Top Technical Skills Employee: {topTechnicalSkillsEmployee.name} ({highestTechnicalSkills.totalScore} points)</p>
+//                             </Card>
+//                             </div>
+//                         <div className="col-md-3">
+//                             <Card title="Completion Rate" style={{ margin: '1rem' }}>
+//                                 <p>Course Completion Rate: {completionRate.toFixed(2)}%</p>
+//                             </Card>
+//                         </div>
+//                         <div className="col-md-6">
+//                             <Card title="Employee Count by Position" style={{ margin: '1rem' }}>
+//                                 <Chart type="bar" data={barChartData} />
+//                             </Card>
+//                         </div>
+//                         {/* <div className="col-md-6">
+//                             <Card title="Course Completion Over Time" style={{ margin: '1rem' }}>
+//                                 <Chart type="line" data={lineChartData} />
+//                             </Card>
+//                         </div> */}
 
-//                     <Card title="Total Employees" style={{ width: '25%', margin: '1rem' }}>
-//                         <p>Total Employees: {totalEmployees}</p>
-//                     </Card>
-
-//                     <Card title="Top Employee in Courses" style={{ width: '25%', margin: '1rem' }}>
-//                         <p>{mostCoursesEmployeeName}</p>
-//                     </Card>
-
-//                     <Card title="Competency Levels" style={{ width: '25%', margin: '1rem' }}>
-//                         <p>Beginner: {competencyLevels.beginner}</p>
-//                         <p>Intermediate: {competencyLevels.intermediate}</p>
-//                         <p>Advanced: {competencyLevels.advanced}</p>
-//                     </Card>
-
-//                     <Card title="Top Skills" style={{ width: '25%', margin: '1rem' }}>
-//                         <p>Top Soft Skills Employee: {topSoftSkillsEmployee.name} ({highestSoftSkills.totalScore} points)</p>
-//                         <p>Top Technical Skills Employee: {topTechnicalSkillsEmployee.name} ({highestTechnicalSkills.totalScore} points)</p>
-//                     </Card>
-
-//                     <div className="competency-chart" style={{ width: '50%', margin: '1rem' }}>
-//                         <h3>Competency Levels Distribution</h3>
-//                         <Chart
-//                             type="pie"
-//                             data={{
-//                                 labels: ['Beginner', 'Intermediate', 'Advanced'],
-//                                 datasets: [{
-//                                     data: [
-//                                         competencyLevels.beginner,
-//                                         competencyLevels.intermediate,
-//                                         competencyLevels.advanced
-//                                     ],
-//                                     backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726']
-//                                 }]
-//                             }}
-//                         />
+//                     </div>
+//                     <div className="row">
+//                         <div className="col-md-4">
+//                             <div className="competency-chart" style={{ margin: '1rem' }}>
+//                                 <h3>Competency Levels Distribution</h3>
+//                                 <Chart
+//                                     type="pie"
+//                                     data={{
+//                                         labels: ['Beginner', 'Intermediate', 'Advanced'],
+//                                         datasets: [{
+//                                             data: [
+//                                                 competencyLevels.beginner,
+//                                                 competencyLevels.intermediate,
+//                                                 competencyLevels.advanced
+//                                             ],
+//                                             backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726']
+//                                         }]
+//                                     }}
+//                                 />
+//                             </div>
+//                         </div>
 //                     </div>
 //                 </div>
 //             </div>
@@ -539,6 +248,7 @@
 // };
 
 // export default Home;
+
 
 
 
@@ -558,6 +268,19 @@ const Home = () => {
     const [achievements, setAchievements] = useState([]);
     const [certifications, setCertifications] = useState([]);
     const [employeeData, setEmployeeData] = useState([]);
+
+    const proficiencyLevels = {
+        'Not at all proficient': 1,
+        'Slightly proficient': 2,
+        'Moderately proficient': 3,
+        'Very proficient': 4,
+        'Extremely proficient': 5,
+        'Expert': 6,
+        'Master': 7,
+        'Leader': 8,
+        'Innovator': 9,
+        'Visionary': 10
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -598,9 +321,48 @@ const Home = () => {
         });
     };
 
-    const enrichedCourses = addEmployeeInfoToData(courses);
+    const employeeCountByPosition = {};
+    employeeData.forEach(employee => {
+        const position = employee.position; // Assuming position field exists
+        if (employeeCountByPosition[position]) {
+            employeeCountByPosition[position]++;
+        } else {
+            employeeCountByPosition[position] = 1;
+        }
+    });
 
+    const barChartData = {
+        labels: Object.keys(employeeCountByPosition),
+        datasets: [{
+            label: 'Employee Count by Position',
+            backgroundColor: '#42A5F5',
+            data: Object.values(employeeCountByPosition),
+        }]
+    };
+
+    // Course completion rate
+    const completedCourses = courses.filter(course => course.completionStatus).length;
+    const totalCourses = courses.length;
+    const completionRate = totalCourses ? (completedCourses / totalCourses) * 100 : 0;
+
+    // Line chart data - Assume we have a `courseCompletionHistory` array
+    const courseCompletionHistory = []; // This would come from your API
+    const lineChartData = {
+        labels: courseCompletionHistory.map(item => item.dateObtained), // Use appropriate date format
+        datasets: [{
+            label: 'Courses Completed Over Time',
+            data: courseCompletionHistory.map(item => item.completedCourses), // Number of courses completed on that date
+            fill: false,
+            borderColor: '#66BB6A',
+            tension: 0.1,
+        }]
+    };
+
+    const enrichedCourses = addEmployeeInfoToData(courses);
     const totalEmployees = employeeData.length;
+
+    const fullTimeEmployees = employeeData.filter(emp => emp.employmentStatus === 'full_time').length;
+    const internEmployees = employeeData.filter(emp => emp.employmentStatus === 'intern').length;
 
     const employeeWithMostCourses = enrichedCourses.reduce((max, course) => {
         if (!max || course.totalCourses > max.totalCourses) {
@@ -625,48 +387,23 @@ const Home = () => {
         else if (cert.competencyLevel === 'Advanced') competencyLevels.advanced++;
     });
 
-    // Function to calculate soft skills score
-    const calculateSoftSkillsScore = (softSkill) => {
-        const numericalValues = {
-            communication: softSkill.communication,
-            problemSolving: softSkill.problemSolving,
-            timeManagement: softSkill.timeManagement,
-            adaptability: softSkill.adaptability === 'Expert' ? 10 : 0,
-            criticalThinking: softSkill.criticalThinking === 'Expert' ? 10 : 0,
-            creativity: softSkill.creativity === 'Expert' ? 10 : 0,
-            leadership: softSkill.leadership === 'Expert' ? 10 : 0,
-            interpersonalSkills: softSkill.interpersonalSkills === 'Expert' ? 10 : 0,
-            emotionalIntelligence: softSkill.emotionalIntelligence === 'Expert' ? 10 : 0,
-        };
-
-        return Object.values(numericalValues).reduce((acc, score) => acc + score, 0);
-    };
-
-    // Function to calculate technical skills score
-    const calculateTechnicalSkillsScore = (technicalSkill) => {
-        const numericalValues = {
-            programmingLanguages: technicalSkill.programmingLanguages,
-            webDevelopment: technicalSkill.webDevelopment,
-            databaseManagement: technicalSkill.databaseManagement,
-            cloudComputing: technicalSkill.cloudComputing === 'Expert' ? 10 : 0,
-            versionControl: technicalSkill.versionControl === 'Expert' ? 10 : 0,
-            machineLearning: technicalSkill.machineLearning === 'Expert' ? 10 : 0,
-            dataAnalysis: technicalSkill.dataAnalysis === 'Expert' ? 10 : 0,
-            cybersecurity: technicalSkill.cybersecurity === 'Expert' ? 10 : 0,
-        };
-
-        return Object.values(numericalValues).reduce((acc, score) => acc + score, 0);
+    const calculateSkillScore = (skill, skillType) => {
+        return Object.keys(skill).reduce((acc, key) => {
+            const proficiency = skill[key];
+            const score = proficiencyLevels[proficiency] || 0;
+            return acc + score;
+        }, 0);
     };
 
     const highestSoftSkills = softSkills.reduce((max, skill) => {
-        const totalScore = calculateSoftSkillsScore(skill);
+        const totalScore = calculateSkillScore(skill, 'soft');
         return totalScore > max.totalScore ? { ...skill, totalScore } : max;
     }, { totalScore: 0 });
 
     const topSoftSkillsEmployee = getEmployeeInfo(highestSoftSkills.userId);
 
     const highestTechnicalSkills = technicalSkills.reduce((max, skill) => {
-        const totalScore = calculateTechnicalSkillsScore(skill);
+        const totalScore = calculateSkillScore(skill, 'technical');
         return totalScore > max.totalScore ? { ...skill, totalScore } : max;
     }, { totalScore: 0 });
 
@@ -685,7 +422,17 @@ const Home = () => {
                             </Card>
                         </div>
                         <div className="col-md-3">
-                            <Card title="Top Employee in Courses" style={{ margin: '1rem' }}>
+                            <Card title="Full-Time Employees" style={{ margin: '1rem' }}>
+                                <p>Full-Time Employees: {fullTimeEmployees}</p>
+                            </Card>
+                        </div>
+                        <div className="col-md-3">
+                            <Card title="Intern Employees" style={{ margin: '1rem' }}>
+                                <p>Intern Employees: {internEmployees}</p>
+                            </Card>
+                        </div>
+                        <div className="col-md-3">
+                            <Card title="Highest Courses by Employee" style={{ margin: '1rem' }}>
                                 <p>{mostCoursesEmployeeName}</p>
                             </Card>
                         </div>
@@ -702,27 +449,31 @@ const Home = () => {
                                 <p>Top Technical Skills Employee: {topTechnicalSkillsEmployee.name} ({highestTechnicalSkills.totalScore} points)</p>
                             </Card>
                         </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-12">
-                            <div className="competency-chart" style={{ margin: '1rem' }}>
-                                <h3>Competency Levels Distribution</h3>
-                                <Chart
-                                    type="pie"
-                                    data={{
-                                        labels: ['Beginner', 'Intermediate', 'Advanced'],
-                                        datasets: [{
-                                            data: [
-                                                competencyLevels.beginner,
-                                                competencyLevels.intermediate,
-                                                competencyLevels.advanced
-                                            ],
-                                            backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726']
-                                        }]
-                                    }}
-                                />
-                            </div>
+                        <div className="col-md-4">
+                            <Card title="Competency Level Distribution" style={{ margin: '1rem' }}>
+                                <Chart type="pie" data={{
+                                    labels: Object.keys(competencyLevels),
+                                    datasets: [{
+                                        data: Object.values(competencyLevels),
+                                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+                                        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                                    }]
+                                }} />
+                            </Card>
                         </div>
+                        <div className="col-md-3">
+                            <Card title="Completion Rate" style={{ margin: '1rem' }}>
+                                <p>Course Completion Rate: {completionRate.toFixed(2)}%</p>
+                            </Card>
+                        </div>
+                        <div className="col-md-5">
+                            <Card title="Employee Count by Position" style={{ margin: '1rem' }}>
+                                <Chart type="bar" data={barChartData} />
+                            </Card>
+                        </div>
+                        {/* Add competency levels chart */}
+                    
+                        
                     </div>
                 </div>
             </div>
