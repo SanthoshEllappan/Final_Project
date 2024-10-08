@@ -1,8 +1,10 @@
+
+
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { AuthUser } from '../AuthRouter';
 import { useNavigate } from 'react-router-dom';
- // Correct import for routing
 
 import {
     Button,
@@ -26,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
         height: '100vh',
         display: 'flex',
         flexDirection: 'column',
+        backgroundColor: '#E2F1E7', // Background color applied from the header component
     },
     container: {
         display: 'flex',
@@ -34,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
     },
     form: {
-        backgroundColor: '#fff',
+        backgroundColor: '#E2F1E7', // Light background for form
         padding: '2rem',
         borderRadius: '8px',
         boxShadow: '0 8px 16px rgba(0, 0, 0, 0.1)',
@@ -47,15 +50,15 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '8px',
     },
     button: {
-        backgroundColor: '#87A2FF', // Change to dark violet
-        color: '#fff',
+        backgroundColor: '#3a4e69', // Light background similar to the search button in the header
+        color: '#ffffff', // Dark text color for contrast
         '&:hover': {
-            backgroundColor: '#4F75FF', // Darker shade for hover effect
+            backgroundColor: '#1E3E62', // Slightly darker shade for hover effect
         },
     },
     footer: {
-        backgroundColor: 'E78F81',
-        color: 'white',
+        backgroundColor: '#ffffff', // Darker footer background for consistency
+        color: '#3a4e69',
         textAlign: 'center',
         padding: '1rem 0',
         marginTop: 'auto',
@@ -141,13 +144,9 @@ export default function SignIn() {
                         </Grid>
                         <Grid item md={6}>
                             <form onSubmit={handleSubmit} className={classes.form}>
-                            <h1 style={{ textAlign: 'center', color:'#87A2FF' }} className="mb-4">
-                                SIGN IN
-                            </h1>
-
-                                {/* <Typography component="h1" variant="h4" className="text-center mb-4">
-                                    Sign in
-                                </Typography> */}
+                                <Typography component="h1" variant="h4" style={{ textAlign: 'center', color: '#3a4e69', marginBottom: '1rem' }}>
+                                    SIGN IN
+                                </Typography>
                                 <TextField
                                     error={!!formError.email}
                                     helperText={formError.email || ''}
@@ -182,11 +181,11 @@ export default function SignIn() {
                                             value=""
                                             id="rememberMe"
                                         />
-                                        <label className="form-check-label" htmlFor="rememberMe">
+                                        <label className="form-check-label" htmlFor="rememberMe" style={{ color: '#333' }}>
                                             Remember me
                                         </label>
                                     </div>
-                                    <Link href="#!" className="text-body">
+                                    <Link href="#" variant="body2" style={{ color: '#3498db' }}>
                                         Forgot password?
                                     </Link>
                                 </div>
@@ -195,22 +194,22 @@ export default function SignIn() {
                                     fullWidth
                                     variant="contained"
                                     className={classes.button}
+                                    style={{
+                                        marginTop: '1rem',
+                                        padding: '0.5rem',
+                                    }}
                                 >
-                                    Login
+                                    Sign In
                                 </Button>
-                                {formError.error && (
-                                    <Typography color="error" variant="body2" className="text-center mt-2">
-                                        {formError.error}
-                                    </Typography>
-                                )}
-                             
                             </form>
                         </Grid>
                     </Grid>
                 </Container>
-                <footer className={classes.footer}>
-                    Copyright © 2024. All rights reserved.
-                </footer>
+                <Box mt={5} className={classes.footer}>
+                    <Typography variant="body2">
+                        &copy; {new Date().getFullYear()} Your Company. All rights reserved.
+                    </Typography>
+                </Box>
             </section>
         </ThemeProvider>
     );

@@ -25,9 +25,14 @@ const CertificationSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
-  userId:{
-    type:mongoose.Schema.Types.ObjectId,
-    required:true
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
+  competencyLevel: {
+    type: String,
+    enum: ['Beginner', 'Intermediate', 'Advanced'], // Specifies the allowed values
+    required: true, // Make it required if necessary
   }
 }, {
   timestamps: true // Automatically adds createdAt and updatedAt fields

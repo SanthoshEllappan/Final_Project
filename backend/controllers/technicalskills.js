@@ -29,7 +29,7 @@ const getTechnicalSkillByIdadmin = async (req, res) => {
   const {userId} = req.params
   try {
     const skill = await TechnicalSkill.findOne({userId:userId});
-    if (!skill) return res.status(404).json({ message: 'Skill not found' });
+    if (!skill) return res.status(200).json({});
     res.status(200).json(skill);
   } catch (error) {
     res.status(500).json({ message: error.message });

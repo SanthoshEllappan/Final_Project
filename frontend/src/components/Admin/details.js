@@ -61,6 +61,23 @@ const Home = () => {
                 <Sidebar />
                 <main className="main-content" style={{ flexGrow: 1, padding: '20px' }}>
                     {/* DataTables with styling */}
+                    <h2>Employee Details</h2>
+                    <DataTable value={employeeData} responsiveLayout="scroll">
+                       
+                        <Column field="firstName" header="Employee Name" />
+                        <Column field="employeeid" header="Employee ID" />
+                        
+                        <Column field="email" header="Email" />
+                        <Column field="phone" header="Phone" />
+                        <Column field="position" header="Position" />
+                        <Column field="startDate" header="Start Date" body={data => new Date(data.startDate).toLocaleDateString()} />
+                        <Column field="dateOfBirth" header="Date of Birth" body={data => new Date(data.dateOfBirth).toLocaleDateString()} />
+                        <Column field="gender" header="Gender" />
+                        <Column field="address" header="Address" />
+                        <Column field="employmentStatus" header="Employment Status" />
+                        <Column field="createdAt" header="Created At" body={data => new Date(data.createdAt).toLocaleString()} />
+                        <Column field="updatedAt" header="Updated At" body={data => new Date(data.updatedAt).toLocaleString()} />
+                    </DataTable>
                     <h2>Soft Skills</h2>
                     <DataTable value={addEmployeeInfoToData(softSkills)} responsiveLayout="scroll">
                         <Column field="employeeName" header="Employee Name" />
@@ -77,25 +94,6 @@ const Home = () => {
                         <Column field="emotionalIntelligence" header="Emotional Intelligence" />
                     </DataTable>
 
-                    <h2>Employee Details</h2>
-                    <DataTable value={employeeData} responsiveLayout="scroll">
-                        <Column field="employeeName" header="Employee Name" />
-                        <Column field="employeeId" header="Employee ID" />
-                        <Column field="firstName" header="First Name" />
-                        <Column field="lastName" header="Last Name" />
-                        <Column field="email" header="Email" />
-                        <Column field="phone" header="Phone" />
-                        <Column field="position" header="Position" />
-                        <Column field="employeeid" header="Employee ID" />
-                        <Column field="startDate" header="Start Date" body={data => new Date(data.startDate).toLocaleDateString()} />
-                        <Column field="dateOfBirth" header="Date of Birth" body={data => new Date(data.dateOfBirth).toLocaleDateString()} />
-                        <Column field="gender" header="Gender" />
-                        <Column field="address" header="Address" />
-                        <Column field="employmentStatus" header="Employment Status" />
-                        <Column field="userId" header="User ID" />
-                        <Column field="createdAt" header="Created At" body={data => new Date(data.createdAt).toLocaleString()} />
-                        <Column field="updatedAt" header="Updated At" body={data => new Date(data.updatedAt).toLocaleString()} />
-                    </DataTable>
 
                     <h2>Technical Skills</h2>
                     <DataTable value={addEmployeeInfoToData(technicalSkills)} responsiveLayout="scroll">
@@ -148,7 +146,7 @@ const Home = () => {
                         <Column field="employeeId" header="Employee ID" />
                         <Column field="achievementTitle" header="Achievement Title" />
                         <Column field="organization" header="Organization" />
-                        <Column field="date" header="Date" body={(rowData) => new Date(rowData.date).toLocaleDateString()} />
+                        <Column field="dateAchieved" header="Date" body={(rowData) => new Date(rowData.dateAchieved).toLocaleDateString()} />
                         <Column field="description" header="Description" />
                     </DataTable>
 
@@ -156,11 +154,11 @@ const Home = () => {
                     <DataTable value={addEmployeeInfoToData(certifications)} responsiveLayout="scroll">
                         <Column field="employeeName" header="Employee Name" />
                         <Column field="employeeId" header="Employee ID" />
-                        <Column field="certificationName" header="Certification Name" />
-                        <Column field="issuer" header="Issuer" />
-                        <Column field="issueDate" header="Issue Date" body={(rowData) => new Date(rowData.issueDate).toLocaleDateString()} />
-                        <Column field="validity" header="Validity (months)" />
-                        <Column field="credentialLink" header="Credential Link" />
+                        <Column field="certificationTitle" header="Certification Name" />
+                        <Column field="specialization" header="Specialization" />
+                        <Column field="competencyLevel" header="Competency level" />
+                        <Column field="dateObtained" header="Issue Date" body={(rowData) => new Date(rowData.dateObtained).toLocaleDateString()} />
+                        <Column field="duration" header="Validity (months)" />
                     </DataTable>
                 </main>
             </div>

@@ -20,6 +20,9 @@ exports.getCertifications = async (req, res) => {
   
   try {
     const certifications = await Certification.findOne({userId:userId});
+    if (!certifications) {
+      return res.status(200).json({});
+    }
     res.status(200).json(certifications);
   } catch (error) {
     res.status(500).json({ error: error.message });

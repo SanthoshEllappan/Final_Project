@@ -97,7 +97,7 @@ exports.getProjectSkillByIdadmin = async (req, res) => {
     const getProjectSkillByIdadmin = await ProjectSkill.findOne({userId:userId});
     
     if (!getProjectSkillByIdadmin) {
-      return res.status(404).json({ message: 'Soft skills entry not found' });
+      return res.status(200).json({});
     }
     
     res.status(200).json(getProjectSkillByIdadmin);

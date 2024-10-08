@@ -1,27 +1,32 @@
+
+
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import './style.css'
+import './style.css'; // Ensure you have styles defined here
 import { Button } from "@material-ui/core";
 
-function UserDetails({setClick}) {
+function UserDetails({ setClick }) {
     const [alluser, setAllUser] = useState([]);
     const [state, setState] = useState(false);
     const token = localStorage.getItem("adminConfig");
-    let header = { headers: { "Authorization": `Bearer ${token}` } }
+    const header = { headers: { "Authorization": `Bearer ${token}` } };
 
     const navigate = useNavigate();
+
     useEffect(() => {
-        axios
-            .get("http://127.0.0.1:8080/admin/userData", header)
-            .then((response) => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get("http://127.0.0.1:8080/admin/userData", header);
                 setAllUser(response.data.data);
-                console.log(response.data)
-            })
-            .catch((err) => {
+            } catch (err) {
                 console.log(err);
-            });
+            }
+        };
+
+        fetchData();
     }, [state]);
 
     const addUser = () => {
@@ -30,29 +35,22 @@ function UserDetails({setClick}) {
 
     const BlockUser = async (_id) => {
         try {
-            Swal.fire({
+            const result = await Swal.fire({
                 title: "Do you Want to block?",
                 showDenyButton: true,
-                confirmButtonText: "yes",
+                confirmButtonText: "Yes",
                 denyButtonText: "No",
                 customClass: {
                     actions: "my-actions",
                     confirmButton: "order-2",
                     denyButton: "order-3",
                 },
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    const res = await axios.post(
-                        "http://127.0.0.1:8080/admin/blockUser",
-                        {
-                            _id,
-                        },
-                        header
-                    );
-
-                    setState(state ? false : true);
-                }
             });
+
+            if (result.isConfirmed) {
+                await axios.post("http://127.0.0.1:8080/admin/blockUser", { _id }, header);
+                setState(prevState => !prevState); // Toggle state to refresh the user list
+            }
         } catch (error) {
             console.log(error.response.data.message);
         }
@@ -60,131 +58,111 @@ function UserDetails({setClick}) {
 
     const unBlockUser = async (_id) => {
         try {
-            Swal.fire({
+            const result = await Swal.fire({
                 title: "Do you Want to unblock?",
                 showDenyButton: true,
-                confirmButtonText: "yes",
+                confirmButtonText: "Yes",
                 denyButtonText: "No",
                 customClass: {
                     actions: "my-actions",
                     confirmButton: "order-2",
                     denyButton: "order-3",
                 },
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    const res = await axios.post(
-                        "http://127.0.0.1:8080/admin/unBlockUser",
-                        {
-                            _id,
-                        },
-                        header
-                    );
-
-                    setState(state ? false : true);
-                }
             });
+
+            if (result.isConfirmed) {
+                await axios.post("http://127.0.0.1:8080/admin/unBlockUser", { _id }, header);
+                setState(prevState => !prevState); // Toggle state to refresh the user list
+            }
         } catch (error) {
             console.log(error.response.data.message);
         }
     };
 
     return (
-        <>
-            <div className="flex min-h-screen w-full bg-gray-900" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div className="col-span-5 w-full">
-                    <div className="overflow-auto lg:overflow-visible w-full">
-                        <h1 className="text-white  justify-center text-center font-bold p-8">
-                            USER Details
-                        </h1>
-                        <Button variant="contained"
-                            className="bg-green-400 text-gray-50 rounded-md px-2"
-                            style={{ margin: "5px 0 10px 0" }}
-                            color="primary"
-                            onClick={addUser}
-                        >
-                            ADD USER
-                        </Button>
+        <div className="container flex min-h-screen w-full">
+            <div className="col-span-5 w-full">
+                <div className="overflow-auto lg:overflow-visible w-full">
+                    <Button
+                        variant="contained"
+                        className="btn-danger mt-5"
+                        onClick={addUser}
+                        style={{backgroundColor: "#3a4e69", color: "#fff"}}
+                    >
+                        ADD USER
+                    </Button>
 
-                        <table className=" table text-gray-400 border-separate space-y-3 text-sm w-full">
-                            <thead className="bg-gray-800 text-gray-500">
-                                <tr>
-                                    <th className="p-3 text-left">Name</th>
-                                    <th className="p-3 text-left">Email</th>
-                                    <th className="p-3 text-left">Status</th>
-                                    <th className="p-3 text-left">Action</th>
+                    <table className="table text-gray-700 w-full">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {alluser.map((item, key) => (
+                                <tr key={key} onClick={() => setClick(item._id)}>
+                                    <td>
+                                        <div className="flex align-items-center">
+                                            <div className="ml-1">
+                                                <div>{item.name}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{item.email}</td>
+                                    <td>
+                                        {item.status ? (
+                                            <span className="status-active">Active</span>
+                                        ) : (
+                                            <span className="status-inactive">Inactive</span>
+                                        )}
+                                    </td>
+                                    <td>
+                                        {item.status ? (
+                                            <Button
+                                                variant="contained"
+                                                className="rounded-md px-2 cursor-pointer"
+                                                onClick={(e) => {
+                                                    e.stopPropagation(); // Prevent row click
+                                                    BlockUser(item._id);
+                                                }}
+                                                style={{backgroundColor: "#E2F1E7", color: "#3a4e69"}}
+                                            >
+                                                Block
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                variant="contained"
+                                                className="bg-green-400 text-white rounded-md px-2"
+                                                onClick={(e) => {
+                                                    e.stopPropagation(); // Prevent row click
+                                                    unBlockUser(item._id);
+                                                }}
+                                            >
+                                                Unblock
+                                            </Button>
+                                        )}
+                                        <Button
+                                            variant="contained"
+                                            className="edit-button rounded-md px-4 ms-5 cursor-pointer"
+                                            style={{backgroundColor: "#3a4e69", color: "#E2F1E7"}}
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // Prevent row click
+                                                navigate('/admin/editUser', { state: { _id: item._id } });
+                                            }}
+                                        >
+                                            Edit
+                                        </Button>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {alluser.map((item, key) => {
-                                    return (
-                                        <tr key={key} className="bg-gray-800 " onClick={()=>setClick(item._id)}>
-                                            <td className="p-3">
-                                                <div className="flex align-items-center">
-                                                    <div className="ml-1">
-                                                        <div className="text-left">{item.name}</div>
-                                                        {/* <div className="text-gray-500">mail@rgmail.com</div> */}
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="p-3">{item.email}</td>
-
-                                            <td className="p-3">
-                                                {item.status ? (
-                                                    <span className="bg-green-400 text-gray-50 rounded-md px-2">
-                                                        Active
-                                                    </span>
-                                                ) : (
-                                                    <span className="bg-red-400 text-gray-50 rounded-md px-2">
-                                                        Inactive
-                                                    </span>
-                                                )}
-                                            </td>
-
-                                            <td className="p-3">
-                                                {item.status ? (
-                                                    <Button variant="contained"
-                                                        className="bg-red-400 text-gray-50 rounded-md px-2 cursor-pointer"
-                                                        color="secondary"
-                                                        onClick={() => {
-                                                            BlockUser(item._id);
-                                                        }}>
-                                                        Block
-                                                    </Button>
-
-
-                                                ) : (
-                                                    <Button variant="contained"
-                                                        className="bg-green-400 text-gray-50 rounded-md px-2"
-                                                        color="primary"
-                                                        onClick={() => {
-                                                            unBlockUser(item._id);
-
-                                                        }}>
-                                                        Unblock
-                                                    </Button>
-                                                )}
-                                                <Button variant="contained"
-                                                    color="primary"
-                                                    style={{ margin: "0 0 0 10px" }}
-                                                    className="bg-blue-400 text-gray-50 rounded-md px-4 ml-5 cursor-pointer"
-                                                    onClick={() => { navigate('/admin/editUser', { state: { _id: item._id } }) }}
-                                                >
-                                                    {" "}
-                                                    Edit
-                                                </Button>
-
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
-
-        </>
+        </div>
     );
 }
 

@@ -22,7 +22,9 @@ exports.getAchievements = async (req, res) => {
   try {
     console.log(userId)
     const achievements = await Achievement.findOne({userId:userId});
-    console.log(achievements);
+    if (!achievements) {
+      return res.status(200).json({});
+    }
     res.status(200).json(achievements);
   } catch (error) {
     res.status(500).json({ error: error.message });

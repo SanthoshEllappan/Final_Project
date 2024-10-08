@@ -122,7 +122,7 @@ exports.getCourseByIdadmin = async (req, res) => {
     const CourseEntry = await Course.findOne({userId:userId});
     
     if (!CourseEntry) {
-      return res.status(404).json({ message: 'Soft skills entry not found' });
+      return res.status(200).json({});
     }
     
     res.status(200).json(CourseEntry);
